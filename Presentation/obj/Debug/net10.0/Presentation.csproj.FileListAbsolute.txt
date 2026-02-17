@@ -1,0 +1,14 @@
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\bin\Debug\net10.0\Presentation.exe
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\bin\Debug\net10.0\Presentation.deps.json
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\bin\Debug\net10.0\Presentation.runtimeconfig.json
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\bin\Debug\net10.0\Presentation.dll
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\bin\Debug\net10.0\Presentation.pdb
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.AssemblyInfoInputs.cache
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.AssemblyInfo.cs
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.csproj.CoreCompileInputs.cache
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.dll
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\refint\Presentation.dll
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.pdb
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\Presentation.genruntimeconfig.cache
+C:\Users\saleh\source\repos\C#_Project_E-commerce_App\Presentation\obj\Debug\net10.0\ref\Presentation.dll
