@@ -8,11 +8,9 @@ namespace Domain.Entities
 {
     public class Cart : BaseEntity<int>
     {
-        public decimal TotalPrice { get; set; } = 0;
-
-        public int? UserID { get; set; }
+        public decimal TotalPrice { get; set; }
+        public int UserID { get; set; }
         public User User { get; set; }
         public List<CartItem> MyProperty { get; set; }
-
     }
 }
