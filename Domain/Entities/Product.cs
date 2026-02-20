@@ -1,11 +1,11 @@
-﻿using Domain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Models;
 
 namespace Domain.Entities
 {
-    public class Product: BaseEntity<int>
+    public class Product : BaseEntity<int>
     {
         public string Name { get; set; }
         public string Image { get; set; }
@@ -18,6 +18,6 @@ namespace Domain.Entities
         public Category category { get; set; }
 
         public List<OrderProduct> OrderProducts { get; private set; } = new List<OrderProduct>();
-
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }

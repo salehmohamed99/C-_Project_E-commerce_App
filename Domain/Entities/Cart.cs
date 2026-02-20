@@ -11,6 +11,6 @@ namespace Domain.Entities
         public decimal TotalPrice { get; set; }
         public int UserID { get; set; }
         public User User { get; set; }
-        public List<CartItem> MyProperty { get; set; }
+        public List<CartItem> CartItems { get; set; }
     }
 }
