@@ -31,5 +31,7 @@ namespace Domain.Entities
 
         public int CartID { get; set; }
         public Cart Cart { get; set; }
+        public List<Order> Orders { get; set; }
+
     }
 }
