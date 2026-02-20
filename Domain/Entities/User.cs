@@ -13,14 +13,14 @@ namespace Domain.Entities
         Customer,
     }
 
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(UserName), IsUnique = true)]
+    //[Index(nameof(Email), IsUnique = true)]
+    //[Index(nameof(UserName), IsUnique = true)]
     public class User : BaseEntity<int>
     {
         public string Name { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
 
-        [EmailAddress]
+        //[EmailAddress]
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
@@ -32,6 +32,5 @@ namespace Domain.Entities
         public int CartID { get; set; }
         public Cart Cart { get; set; }
         public List<Order> Orders { get; set; }
-
     }
 }
