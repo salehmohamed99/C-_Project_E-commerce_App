@@ -27,8 +27,8 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(ci => ci.Quantity).IsRequired().HasDefaultValue(1);
 
-            builder.Property(ci => ci.Product.Price).HasColumnName("Prod_price");
-            builder.Property(ci => ci.Product.Image).HasColumnName("Prod_image");
+            //builder.Property(ci => ci.Product.Price).HasColumnName("Prod_price");
+            //builder.Property(ci => ci.Product.Image).HasColumnName("Prod_image");
             builder.Property(ci => ci.CreatedAt).HasColumnName("Added_At");
         }
     }

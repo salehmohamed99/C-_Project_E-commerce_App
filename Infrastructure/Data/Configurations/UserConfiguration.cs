@@ -30,9 +30,9 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(u => u.Address).HasColumnType("TEXT");
 
-            builder.Property(u => u.DateOfBirth).HasColumnType("date").IsRequired(false);
+            builder.Property(u => u.DateOfBirth).HasColumnType("date");
 
-            builder.Property(u => u.Role).HasMaxLength(20).HasDefaultValue("Customer");
+            builder.Property(u => u.Role).HasMaxLength(20).HasDefaultValue(Role.Customer);
         }
     }
 }

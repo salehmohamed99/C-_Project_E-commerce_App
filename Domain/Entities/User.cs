@@ -26,8 +26,8 @@ namespace Domain.Entities
         public string PhoneNumber { get; set; } = string.Empty;
         public string ProfilePicture { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
-        public DateTime DateOfBirth { get; set; }
-        public Role Role { get; set; } = Role.Customer;
+        public DateTime? DateOfBirth { get; set; }
+        public Role Role { get; set; }
 
         public int CartID { get; set; }
         public Cart Cart { get; set; }
