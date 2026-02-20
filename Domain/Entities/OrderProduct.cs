@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Domain.Entities
 {
-    public class OrderProduct
+    public class OrderProduct : BaseEntity<int>
     {
         public int OrderId { get; set; }
         public Order order { get; set; }

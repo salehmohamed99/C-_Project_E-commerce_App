@@ -21,6 +21,8 @@ namespace Domain.Entities
          public int UserId { get; private set; }
          public User User { get; private set; }
 
-       }
+        public List<OrderProduct> OrderProducts { get; private set; }
+
+    }
     
 }
