@@ -1,5 +1,5 @@
 .vs/
 **/obj/
 **/bin/
-ApplicationDbContext.cs
+Infrastructure/Data/ApplicationDbContext.cs
 
