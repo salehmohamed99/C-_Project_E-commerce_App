@@ -35,6 +35,11 @@ namespace Infrastructure.Data.Configurations
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(p => p.OrderProducts)
+                .WithOne(o => o.product)
+                .HasForeignKey(o => o.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
