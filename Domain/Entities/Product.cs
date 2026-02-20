@@ -13,5 +13,8 @@ namespace Domain.Entities
         public string Description { get; set; }
         public int UnitsInStock { get; set; } = 0;
         public bool IsActive { get; private set; } = true;
+
+        public int CategoryId { get; set; }
+        public Category category { get; set; }
     }
 }

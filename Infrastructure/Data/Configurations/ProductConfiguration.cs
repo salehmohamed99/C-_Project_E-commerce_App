@@ -30,6 +30,10 @@ namespace Infrastructure.Data.Configurations
             builder.Property(p => p.IsActive)
                   .HasDefaultValue(true);
 
+            builder.HasOne(p => p.category)
+                .WithMany(c => c.products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }
