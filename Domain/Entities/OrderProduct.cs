@@ -13,7 +13,7 @@ namespace Domain.Entities
 
         public Product product { get; set; }
 
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
         public decimal UnitPrice { get; set; }
     }
    
