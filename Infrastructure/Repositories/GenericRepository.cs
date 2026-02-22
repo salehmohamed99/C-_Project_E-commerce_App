@@ -15,9 +15,9 @@ namespace Infrastructure.Repositories
     {
         public ApplicationDbContext _context;
 
-        public List<TEntity> GetAllEntitys()
+        public IQueryable<TEntity> GetAllEntitys()
         {
-            return _context.Set<TEntity>().ToList();
+            return _context.Set<TEntity>();
         }
 
         public void Add(TEntity entity)
