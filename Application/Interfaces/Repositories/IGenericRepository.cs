@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IGenericRepository<TEntity, TKey>
     {
-        public List<TEntity> GetAllEntitys();
+        public IQueryable<TEntity> GetAllEntitys();
         public void Add(TEntity entity);
         public void Update(TEntity entity);
         public void Delete(TEntity entity);
