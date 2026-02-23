@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.DTOs.UserDto
 {
-    internal class UpdateUserDto
+    public class UpdateUserDto
     {
         public string Name { get; set; }
         public string Phone_Number { get; set; }

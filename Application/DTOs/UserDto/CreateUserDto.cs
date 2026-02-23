@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.DTOs.UserDto
 {
-    internal class CreateUserDto
+    public class CreateUserDto
     {
         public string Name { get; set; }
         public string UserName { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.DTOs
 {
-    internal class UpdateCartItemDto
+    public class UpdateCartItemDto
     {
         public int Quantity { get; set; }
     }
