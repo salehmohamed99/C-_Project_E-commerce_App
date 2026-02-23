@@ -1,10 +1,21 @@
-﻿namespace Presentation
+﻿using Application.Interfaces.Repositories;
+using Application.Services;
+using Domain.Entities;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
+using Presentation.Forms;
+using System.Windows.Forms;
+
+namespace Presentation
 {
-    internal class Program
+    static class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+            System.Windows.Forms.Application.Run(new LoginForm());
         }
     }
 }

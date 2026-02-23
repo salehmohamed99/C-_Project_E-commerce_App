@@ -13,7 +13,14 @@ namespace Infrastructure.Repositories
     public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey>
         where TEntity : BaseEntity<TKey> //class
     {
-        public ApplicationDbContext _context;
+        protected ApplicationDbContext _context;
+
+        public GenericRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+      
 
         public IQueryable<TEntity> GetAllEntitys()
         {

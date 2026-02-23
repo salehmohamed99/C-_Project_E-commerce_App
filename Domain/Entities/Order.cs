@@ -15,10 +15,10 @@ namespace Domain.Entities
       }
       public class Order : BaseEntity<int>
       {
-         public OrderStatus Status { get; private set; }
-         public Decimal TotalAmount { get; private set; }
-         public string ShippingAddress { get; private set; }
-         public int UserId { get; private set; }
+         public OrderStatus Status { get; set; }
+         public Decimal TotalAmount { get; set; }
+         public string ShippingAddress { get; set; }
+         public int UserId { get; set; }
          public User User { get; private set; }
 
         public List<OrderProduct> OrderProducts { get; private set; }
