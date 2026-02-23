@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Forms;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
@@ -11,97 +10,112 @@ namespace Presentation.Forms
     {
         private ApplicationDbContext _context;
         private IGenericRepository<Category, int> _categoryRepository;
-        private DataGridView dgvCategories;
+        private int _editingCategoryId = 0;
 
         public CategoryManagementForm(ApplicationDbContext context)
         {
             InitializeComponent();
             _context = context;
             _categoryRepository = new GenericRepository<Category, int>(_context);
+            SetupColumns();
             LoadCategories();
         }
 
-        private void InitializeComponent()
+        private void SetupColumns()
         {
-            this.Text = "Category Management";
-            this.Size = new Size(700, 500);
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-            // Title Label
-            Label lblTitle = new Label();
-            lblTitle.Text = "Manage Categories";
-            lblTitle.Font = new Font("Arial", 14, FontStyle.Bold);
-            lblTitle.Location = new Point(20, 20);
-            lblTitle.Size = new Size(300, 25);
-            this.Controls.Add(lblTitle);
-
-            // Name TextBox
-            Label lblName = new Label();
-            lblName.Text = "Category Name:";
-            lblName.Location = new Point(20, 60);
-            lblName.Size = new Size(100, 20);
-            this.Controls.Add(lblName);
-
-            TextBox txtName = new TextBox();
-            txtName.Name = "txtName";
-            txtName.Location = new Point(130, 60);
-            txtName.Size = new Size(200, 25);
-            this.Controls.Add(txtName);
-
-            // Add Button
-            Button btnAdd = new Button();
-            btnAdd.Text = "Add Category";
-            btnAdd.Location = new Point(350, 60);
-            btnAdd.Size = new Size(120, 30);
-            btnAdd.Click += (s, e) => AddCategory(txtName.Text);
-            this.Controls.Add(btnAdd);
-
-            // DataGridView
-            dgvCategories = new DataGridView();
-            dgvCategories.Name = "dgvCategories";
-            dgvCategories.Location = new Point(20, 110);
-            dgvCategories.Size = new Size(650, 300);
             dgvCategories.AutoGenerateColumns = false;
-            dgvCategories.Columns.Add("ID", "ID");
-            dgvCategories.Columns.Add("Name", "Name");
-            dgvCategories.Columns.Add("Edit", "Edit");
-            dgvCategories.Columns.Add("Delete", "Delete");
-            this.Controls.Add(dgvCategories);
+            dgvCategories.Columns.Clear();
 
-            // Close Button
-            Button btnClose = new Button();
-            btnClose.Text = "Close";
-            btnClose.Location = new Point(595, 420);
-            btnClose.Size = new Size(75, 30);
-            btnClose.Click += (s, e) => this.Close();
-            this.Controls.Add(btnClose);
+            dgvCategories.Columns.Add(new DataGridViewTextBoxColumn { Name = "ID",   HeaderText = "ID",   ReadOnly = true, Width = 50 });
+            dgvCategories.Columns.Add(new DataGridViewTextBoxColumn { Name = "Name", HeaderText = "Name", ReadOnly = true, Width = 350 });
+
+            var btnEdit = new DataGridViewButtonColumn { Name = "Edit", HeaderText = "", Text = "Edit", UseColumnTextForButtonValue = true, Width = 80 };
+            dgvCategories.Columns.Add(btnEdit);
+
+            var btnDelete = new DataGridViewButtonColumn { Name = "Delete", HeaderText = "", Text = "Delete", UseColumnTextForButtonValue = true, Width = 80 };
+            dgvCategories.Columns.Add(btnDelete);
         }
 
         private void LoadCategories()
         {
             dgvCategories.Rows.Clear();
             var categories = _categoryRepository.GetAllEntitys().Where(c => !c.IsDeleted).ToList();
-
             foreach (var category in categories)
-            {
-                dgvCategories.Rows.Add(category.ID, category.Name, "Edit", "Delete");
-            }
+                dgvCategories.Rows.Add(category.ID, category.Name);
         }
 
-        private void AddCategory(string name)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(txtName.Text))
             {
-                MessageBox.Show("Please enter a category name!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a category name!", "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var category = new Category { Name = name };
-            _categoryRepository.Add(category);
-            _categoryRepository.SaveChanges();
+            if (_editingCategoryId > 0)
+            {
+                // Update mode
+                var category = _categoryRepository.GetAllEntitys().FirstOrDefault(c => c.ID == _editingCategoryId);
+                if (category != null)
+                {
+                    category.Name = txtName.Text;
+                    _categoryRepository.Update(category);
+                    _categoryRepository.SaveChanges();
+                    MessageBox.Show("Category updated successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                _editingCategoryId = 0;
+                btnAdd.Text = "Add Category";
+            }
+            else
+            {
+                // Add mode
+                _categoryRepository.Add(new Category { Name = txtName.Text });
+                _categoryRepository.SaveChanges();
+                MessageBox.Show("Category added successfully!", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
-            MessageBox.Show("Category added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            txtName.Clear();
             LoadCategories();
         }
+
+        private void dgvCategories_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            int categoryId   = Convert.ToInt32(dgvCategories.Rows[e.RowIndex].Cells["ID"].Value);
+            string categoryName = dgvCategories.Rows[e.RowIndex].Cells["Name"].Value?.ToString() ?? "";
+
+            if (e.ColumnIndex == dgvCategories.Columns["Edit"].Index)
+            {
+                // Edit mode - populate txtName
+                _editingCategoryId = categoryId;
+                txtName.Text       = categoryName;
+                btnAdd.Text        = "Update Category";
+                txtName.Focus();
+            }
+            else if (e.ColumnIndex == dgvCategories.Columns["Delete"].Index)
+            {
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete '{categoryName}'?",
+                    "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result != DialogResult.Yes) return;
+
+                var category = _categoryRepository.GetAllEntitys().FirstOrDefault(c => c.ID == categoryId);
+                if (category == null) return;
+
+                _categoryRepository.Delete(category);
+                _categoryRepository.SaveChanges();
+                MessageBox.Show("Category deleted successfully!", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadCategories();
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e) => this.Close();
     }
 }
+

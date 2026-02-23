@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 using Application.Interfaces.Repositories;
 using Application.Services;
@@ -24,103 +18,28 @@ namespace Presentation.Forms
         private IGenericRepository<Product, int> _productRepository;
         private CartServices _cartServices;
         private int _userId;
-        private DataGridView dgvCart;
-        private Label lblTotal;
 
         public CartForm(ApplicationDbContext context, int userId)
         {
             InitializeComponent();
-            _context = context;
-            _userId = userId;
-            _cartRepository = new GenericRepository<Cart, int>(_context);
+            _context            = context;
+            _userId             = userId;
+            _cartRepository     = new GenericRepository<Cart, int>(_context);
             _cartItemRepository = new GenericRepository<CartItem, int>(_context);
-            _productRepository = new GenericRepository<Product, int>(_context);
-            _cartServices = new CartServices(_cartRepository);
+            _productRepository  = new GenericRepository<Product, int>(_context);
+            _cartServices       = new CartServices(_cartRepository);
             LoadCart();
-        }
-
-        private void InitializeComponent()
-        {
-            this.Text = "Shopping Cart";
-            this.Size = new Size(900, 600);
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-            // Title Label
-            Label lblTitle = new Label();
-            lblTitle.Text = "Your Shopping Cart";
-            lblTitle.Font = new Font("Arial", 14, FontStyle.Bold);
-            lblTitle.Location = new Point(20, 20);
-            lblTitle.Size = new Size(300, 25);
-            this.Controls.Add(lblTitle);
-
-            // DataGridView
-            dgvCart = new DataGridView();
-            dgvCart.Name = "dgvCart";
-            dgvCart.Location = new Point(20, 70);
-            dgvCart.Size = new Size(840, 350);
-            dgvCart.AutoGenerateColumns = false;
-            dgvCart.Columns.Add("ProductID", "Product ID");
-            dgvCart.Columns.Add("ProductName", "Product Name");
-            dgvCart.Columns.Add("Price", "Unit Price");
-            dgvCart.Columns.Add("Quantity", "Quantity");
-            dgvCart.Columns.Add("Subtotal", "Subtotal");
-            dgvCart.Columns.Add("Update", "Update");
-            dgvCart.Columns.Add("Remove", "Remove");
-            this.Controls.Add(dgvCart);
-
-            // Total Price Label
-            lblTotal = new Label();
-            lblTotal.Text = "Total: $0.00";
-            lblTotal.Font = new Font("Arial", 12, FontStyle.Bold);
-            lblTotal.Location = new Point(20, 440);
-            lblTotal.Size = new Size(200, 25);
-            this.Controls.Add(lblTotal);
-
-            // Clear Cart Button
-            Button btnClear = new Button();
-            btnClear.Text = "Clear Cart";
-            btnClear.Location = new Point(20, 480);
-            btnClear.Size = new Size(100, 30);
-            btnClear.Click += (s, e) => ClearCart();
-            this.Controls.Add(btnClear);
-
-            // Checkout Button
-            Button btnCheckout = new Button();
-            btnCheckout.Text = "Proceed to Checkout";
-            btnCheckout.Location = new Point(130, 480);
-            btnCheckout.Size = new Size(150, 30);
-            btnCheckout.Click += (s, e) => Checkout();
-            this.Controls.Add(btnCheckout);
-
-            // Continue Shopping Button
-            Button btnContinue = new Button();
-            btnContinue.Text = "Continue Shopping";
-            btnContinue.Location = new Point(290, 480);
-            btnContinue.Size = new Size(130, 30);
-            btnContinue.Click += (s, e) => this.Close();
-            this.Controls.Add(btnContinue);
-
-            // Close Button
-            Button btnClose = new Button();
-            btnClose.Text = "Close";
-            btnClose.Location = new Point(785, 520);
-            btnClose.Size = new Size(75, 30);
-            btnClose.Click += (s, e) => this.Close();
-            this.Controls.Add(btnClose);
         }
 
         private void LoadCart()
         {
             dgvCart.Rows.Clear();
-
             var user = _context.Users.FirstOrDefault(u => u.ID == _userId);
             if (user == null || user.CartID == 0) return;
 
             var cart = _cartRepository.GetAllEntitys()
-                .Include(c => c.CartItems)
-                .ThenInclude(ci => ci.Product)
+                .Include(c => c.CartItems).ThenInclude(ci => ci.Product)
                 .FirstOrDefault(c => c.ID == user.CartID);
-
             if (cart == null) return;
 
             decimal total = 0;
@@ -128,22 +47,51 @@ namespace Presentation.Forms
             {
                 decimal subtotal = item.Quantity * item.Product.Price;
                 total += subtotal;
-
                 dgvCart.Rows.Add(
+                    LoadProductImage(item.Product.Image),
                     item.ProductId,
                     item.Product.Name,
                     item.Product.Price,
                     item.Quantity,
                     subtotal,
                     "Update",
-                    "Remove"
-                );
+                    "Remove");
             }
-
-            lblTotal.Text = $"Total: ${total:F2}";
+            lblTotal.Text = string.Format("Total: ${0:F2}", total);
         }
 
-        private void ClearCart()
+        private Image? LoadProductImage(string? imagePath)
+        {
+            if (!string.IsNullOrWhiteSpace(imagePath) && File.Exists(imagePath))
+            {
+                try
+                {
+                    using var fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
+                    using var ms = new MemoryStream();
+                    fs.CopyTo(ms);
+                    ms.Position = 0;
+                    using var img = Image.FromStream(ms);
+                    return (Image)img.Clone();
+                }
+                catch { }
+            }
+            return CreatePlaceholder();
+        }
+
+        private static Image CreatePlaceholder()
+        {
+            var bmp = new Bitmap(60, 50);
+            using var g = Graphics.FromImage(bmp);
+            g.Clear(Color.WhiteSmoke);
+            using var pen = new Pen(Color.LightGray, 1);
+            g.DrawRectangle(pen, 0, 0, 59, 49);
+            using var font = new Font("Arial", 6f);
+            var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            g.DrawString("No Image", font, Brushes.Gray, new RectangleF(0, 0, 60, 50), sf);
+            return bmp;
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
         {
             var user = _context.Users.FirstOrDefault(u => u.ID == _userId);
             if (user != null && user.CartID > 0)
@@ -153,23 +101,27 @@ namespace Presentation.Forms
                 {
                     _cartServices.ClearCart(cart);
                     LoadCart();
-                    MessageBox.Show("Cart cleared successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Cart cleared successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
 
-        private void Checkout()
+        private void btnCheckout_Click(object sender, EventArgs e)
         {
             var user = _context.Users.FirstOrDefault(u => u.ID == _userId);
             if (user?.CartID == 0 || dgvCart.Rows.Count == 0)
             {
-                MessageBox.Show("Your cart is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Your cart is empty!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            OrderPlacementForm form = new OrderPlacementForm(_context, _userId);
-            form.ShowDialog();
+            new OrderPlacementForm(_context, _userId).ShowDialog();
             LoadCart();
         }
+
+        private void btnContinue_Click(object sender, EventArgs e) => this.Close();
+        private void btnClose_Click(object sender, EventArgs e)     => this.Close();
+        private void CartForm_Load(object sender, EventArgs e)      { }
     }
 }
