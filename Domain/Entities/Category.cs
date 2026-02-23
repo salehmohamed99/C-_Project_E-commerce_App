@@ -10,5 +10,14 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         public List<Product> products { get; set; }
+
+        public void Rename(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+                throw new ArgumentException("Category name cannot be empty.");
+            if (newName.Length > 100)
+                throw new ArgumentException("Category name cannot exceed 100 characters.");
+            Name = newName;
+        }
     }
 }
