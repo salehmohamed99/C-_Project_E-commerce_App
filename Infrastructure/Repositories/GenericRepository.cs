@@ -15,6 +15,11 @@ namespace Infrastructure.Repositories
     {
         public ApplicationDbContext _context;
 
+        public GenericRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IQueryable<TEntity> GetAllEntitys()
         {
             return _context.Set<TEntity>();
