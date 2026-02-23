@@ -20,10 +20,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public GenericRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+      
 
         public IQueryable<TEntity> GetAllEntitys()
         {
