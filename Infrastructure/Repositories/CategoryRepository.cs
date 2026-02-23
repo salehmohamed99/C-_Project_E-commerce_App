@@ -25,20 +25,7 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<Category> GetByNameAsync(string name)
-        {
-            return await _context.Categories
-                                 .Include(c => c.products)
-                                 .AsNoTracking()
-                                 .FirstOrDefaultAsync(c => c.Name == name);
-        }
-
-        public async Task<bool> HasProductsAsync(int categoryId)
-        {
-            return await _context.Products
-                                 .AnyAsync(p => p.CategoryId == categoryId);
-        }
-
+ 
         public Category GetByName(string name)
         {
             return _context.Categories.
@@ -48,6 +35,13 @@ namespace Infrastructure.Repositories
         public bool HasProducts(int categoryId)
         {
             return _context.Products.Any(p => p.CategoryId == categoryId);
+        }
+
+        public Category GetById(int id)
+        {
+            return _context.Categories
+                          .Include(c => c.products)
+                          .FirstOrDefault(c => c.ID == id);
         }
     }
 }
