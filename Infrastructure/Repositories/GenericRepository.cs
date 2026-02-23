@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
 
       
 
-        public IQueryable<TEntity> GetAllEntitys()
+        public virtual IQueryable<TEntity> GetAllEntitys()
         {
             return _context.Set<TEntity>();
         }

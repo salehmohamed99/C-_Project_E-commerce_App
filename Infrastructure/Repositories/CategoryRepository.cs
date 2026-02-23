@@ -17,6 +17,13 @@ namespace Infrastructure.Repositories
         {
         }
 
+        public override IQueryable<Category> GetAllEntitys()
+        {
+            return _context.Categories
+                           .Include(c => c.products);
+        }
+
+
         public IQueryable<Category> GetCategoriesWithProducts()
         {
             return _context.Categories
@@ -25,7 +32,7 @@ namespace Infrastructure.Repositories
 
         }
 
- 
+
         public Category GetByName(string name)
         {
             return _context.Categories.
