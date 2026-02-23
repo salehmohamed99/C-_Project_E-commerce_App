@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
     {
         Category GetByName(string name);
         bool HasProducts(int categoryId);
+        Category GetById(int id);
     }
 }
