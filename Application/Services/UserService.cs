@@ -30,7 +30,20 @@ namespace Application.Services
 
         public IQueryable<UserDto> GetAll()
         {
-            return _userRepository.GetAllEntitys().Select(MapToDto).ToList().AsQueryable();
+            return _userRepository
+                .GetAllEntitys()
+                .Select(u => new UserDto
+                {
+                    Id = u.ID,
+                    Name = u.Name,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    Phone_Number = u.PhoneNumber,
+                    Profile_Picture = u.ProfilePicture,
+                    Address = u.Address,
+                    DateOfBirth = u.DateOfBirth,
+                    Role = u.Role.ToString(),
+                });
         }
 
         public UserDto Create(CreateUserDto dto)
