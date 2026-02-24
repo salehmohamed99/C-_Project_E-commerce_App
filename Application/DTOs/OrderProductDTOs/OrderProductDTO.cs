@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DTOs
+namespace Application.DTOs.OrderProductDTOs
 {
-    public class OrderProduct_DTO
+    public class OrderProductDTO
     {
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
 

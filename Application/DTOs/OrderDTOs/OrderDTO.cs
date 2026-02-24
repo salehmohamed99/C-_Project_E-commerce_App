@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.DTOs.OrderProductDTOs;
 using Domain.Entities;
 
-namespace Application.DTOs
+namespace Application.DTOs.OrderDTOs
 { 
     public class OrderDTO
     {
@@ -13,6 +14,8 @@ namespace Application.DTOs
         public decimal TotalAmount { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }
+        public List<OrderProductDTO> OrderProducts { get; set; }
+
 
     }
 }
