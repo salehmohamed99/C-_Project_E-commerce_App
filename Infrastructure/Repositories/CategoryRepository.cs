@@ -23,16 +23,6 @@ namespace Infrastructure.Repositories
                            .Include(c => c.products);
         }
 
-
-        public IQueryable<Category> GetCategoriesWithProducts()
-        {
-            return _context.Categories
-                           .Include(c => c.products);
-
-
-        }
-
-
         public Category GetByName(string name)
         {
             return _context.Categories.
