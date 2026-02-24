@@ -17,7 +17,7 @@ namespace Application.Mappers
             TypeAdapterConfig<CreateCategoryDto, Category>.NewConfig();
             TypeAdapterConfig<Category, UpdateCategoryDto>.NewConfig();
 
-            TypeAdapterConfig<Product, productDTO>.NewConfig();
+            TypeAdapterConfig<Product, ProductDto>.NewConfig();
             TypeAdapterConfig<CreateProductDto, Product>.NewConfig();
             TypeAdapterConfig<Product, UpdateProductDto>.NewConfig();
 
