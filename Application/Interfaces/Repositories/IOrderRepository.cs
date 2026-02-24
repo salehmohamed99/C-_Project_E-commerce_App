@@ -7,6 +7,9 @@ namespace Application.Interfaces.Repositories
 {
     public interface IOrderRepository :IGenericRepository<Order,int>
     {
+        IQueryable<Order> GetOrdersWithProducts();
+        IQueryable<Order> GetOrdersByUser(int userId);
+        Order GetOrderWithDetails(int id);
 
     }
 }
