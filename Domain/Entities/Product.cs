@@ -49,7 +49,7 @@ namespace Domain.Entities
         {
             
             if (UnitsInStock < quantity)
-                throw new OutOfStockException(Id, UnitsInStock, quantity);
+                throw new InvalidOperationException("Quantity dosn't enough");
             UnitsInStock -= quantity;
         }
 
