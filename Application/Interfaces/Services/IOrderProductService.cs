@@ -7,7 +7,7 @@ namespace Application.Interfaces.Services
 {
     public interface IOrderProductService
     {
-        Task<IEnumerable<OrderProductDTO>> ViewProductsByOrderAsync(int orderId);
+        Task<IEnumerable<OrderProductDTO>> ViewProductsByOrdersAsync(int orderId);
         Task UpdateOrderProductAsync(UpdateOrderProductDTO dto);
         Task AddOrderProductAsync(CreateOrderProductDTO dto, int orderId);
         Task CancelOrderProductAsync(int productId, int orderId);
