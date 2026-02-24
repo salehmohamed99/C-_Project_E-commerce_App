@@ -13,6 +13,6 @@ namespace Application.Interfaces.Repositories
         public void Update(TEntity entity);
         public void Delete(TEntity entity);
         public int SaveChanges();
-        Task DeleteAsync(object id);
+        //Task DeleteAsync(object id);
     }
 }

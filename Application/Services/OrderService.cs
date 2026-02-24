@@ -27,7 +27,7 @@ namespace Application.Services
 
        public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid)
         {
-            var CartItems = await Task.Run(() => CartItemRepository.GetAllEntitys().Where(c => c.CartId == cartid).ToList());
+            var CartItems = CartItemRepository.GetAllEntitys().Where(c => c.CartId == cartid).ToList();
             if (!CartItems.Any()) 
                 throw new Exception("Cart is empty.");
 
@@ -47,9 +47,10 @@ namespace Application.Services
 
             OrderRepository.Add(order);
             await Task.Run(() => OrderRepository.SaveChanges());
-            foreach (var i in CartItems)
+
+            foreach (var item in CartItems)
             {
-                await CartItemRepository.DeleteAsync(i.ID);
+                CartItemRepository.Delete(item);
             }
             await Task.Run(() => CartItemRepository.SaveChanges());
 
