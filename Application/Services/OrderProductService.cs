@@ -5,13 +5,11 @@ using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+
 namespace Application.Services
 {
-    public class OrderService
-    { 
-
-
+    public class OrderProductService
+    {
     }
 }

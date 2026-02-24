@@ -7,6 +7,7 @@ namespace Application.DTOs.OrderDTOs
 {
     public class UpdateOrderDTO
     {
+        public int ID { get; set; }
         public int UserId { get; set; }
         public OrderStatus Status { get; set; }
     }
