@@ -10,7 +10,11 @@ namespace Application.Interfaces.Repositories
         IQueryable<OrderProduct> GetProductsByOrder(int orderId);
         IQueryable<OrderProduct> GetByProductId(int productId);
 
-       
+
+        OrderProduct GetByProductAndOrder(int productId, int orderId);
+
+
+
 
     }
 }
