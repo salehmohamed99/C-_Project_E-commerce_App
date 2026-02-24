@@ -39,5 +39,15 @@ namespace Infrastructure.Repositories
         }
 
 
+        public OrderProduct GetByProductAndOrder(int productId, int orderId)
+        {
+            return _context.OrderProducts
+                           .Include(op => op.order)
+                           .Include(op => op.product)
+                           .FirstOrDefault(op => op.ProductId == productId && op.OrderId == orderId);
+        }
+
+
+
     }
 }
