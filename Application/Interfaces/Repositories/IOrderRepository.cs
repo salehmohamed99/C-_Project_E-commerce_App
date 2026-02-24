@@ -10,6 +10,6 @@ namespace Application.Interfaces.Repositories
         IQueryable<Order> GetOrdersWithProducts();
         IQueryable<Order> GetOrdersByUser(int userId);
         Order GetOrderWithDetails(int id);
-
+        Task AddAsync(Order order);
     }
 }
