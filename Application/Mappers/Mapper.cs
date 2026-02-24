@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.CategoryDTOs;
+using Application.DTOs.ProductDTOs;
 using Domain.Entities;
 using Mapster;
 using System;
@@ -15,6 +16,13 @@ namespace Application.Mappers
             TypeAdapterConfig<Category, CategoryDto>.NewConfig();
             TypeAdapterConfig<CreateCategoryDto, Category>.NewConfig();
             TypeAdapterConfig<Category, UpdateCategoryDto>.NewConfig();
+
+            TypeAdapterConfig<Product, productDTO>.NewConfig();
+            TypeAdapterConfig<CreateProductDto, Product>.NewConfig();
+            TypeAdapterConfig<Product, UpdateProductDto>.NewConfig();
+
+
+            
                 
         }
     }
