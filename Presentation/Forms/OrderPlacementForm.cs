@@ -79,7 +79,7 @@ namespace Presentation.Forms
                 UserId          = _userId,
                 ShippingAddress = txtAddress.Text,
                 TotalAmount     = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price),
-                Status          = OrderStatus.Pending
+                Status          = OrderStatus.Processing
             };
             _orderRepository.Add(order);
             _orderRepository.SaveChanges();

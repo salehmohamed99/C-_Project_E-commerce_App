@@ -25,11 +25,11 @@ namespace Application.Services
             CartItemRepository = cartItemRepo;
         }
 
-       public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid)
+        public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid)
         {
             var CartItems = CartItemRepository.GetAllEntitys().Where(c => c.CartId == cartid).ToList();
-            if (!CartItems.Any()) 
-                throw new Exception("Cart is empty.");
+            if (!CartItems.Any())
+                return null;
 
             var order = new Order
             {
@@ -40,11 +40,12 @@ namespace Application.Services
                 OrderProducts = CartItems.Select(ci => new OrderProduct
                 {
                     ProductId = ci.ProductId,
-                    Quantity = ci.Quantity
+                    Quantity = ci.Quantity,
+                    UnitPrice = ci.Product.Price,
+                    IsDeleted = false
                 }).ToList()
             };
-
-
+ 
             OrderRepository.Add(order);
             await Task.Run(() => OrderRepository.SaveChanges());
 
