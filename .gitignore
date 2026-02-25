@@ -3,3 +3,4 @@
 **/bin/
 Infrastructure/Data/ApplicationDbContext.cs
 
+*.md
