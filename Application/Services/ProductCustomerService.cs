@@ -44,7 +44,7 @@ namespace Application.Services
         public IEnumerable<ProductDto> SearchByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Search name cannot be empty.");
+                return GetAll().ToList();
 
             return _productRepository.SearchByName(name.Trim()).Adapt<IEnumerable<ProductDto>>();
         }

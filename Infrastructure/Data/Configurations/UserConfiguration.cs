@@ -24,11 +24,11 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(u => u.Password).HasMaxLength(255).IsRequired();
 
-            builder.Property(u => u.PhoneNumber).HasMaxLength(20);
+            builder.Property(u => u.PhoneNumber).HasMaxLength(20).IsRequired(false);
 
-            builder.Property(u => u.ProfilePicture).HasMaxLength(255);
+            builder.Property(u => u.ProfilePicture).HasMaxLength(255).IsRequired(false);
 
-            builder.Property(u => u.Address).HasColumnType("TEXT");
+            builder.Property(u => u.Address).HasColumnType("TEXT").IsRequired(false);
 
             builder.Property(u => u.DateOfBirth).HasColumnType("date");
 

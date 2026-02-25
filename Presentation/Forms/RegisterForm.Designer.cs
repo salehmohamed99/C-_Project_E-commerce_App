@@ -108,7 +108,7 @@ namespace Presentation.Forms
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
             // Email
-            this.lblEmail.Text      = "Email";
+            this.lblEmail.Text      = "Email  *";
             this.lblEmail.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
             this.lblEmail.Location  = new System.Drawing.Point(fieldLeft, startY + 2 * rowHeight);
