@@ -131,6 +131,27 @@ namespace Presentation.Forms
                     },
                 }
             );
+            dgvOrders.Columns.Add(
+                new DataGridViewButtonColumn
+                {
+                    Name = "Cancel",
+                    HeaderText = "",
+                    Text = "Cancel",
+                    UseColumnTextForButtonValue = true,
+                    Width = 100,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = Color.FromArgb(231, 76, 60),
+                        ForeColor = Color.White,
+                        Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                        Alignment = DataGridViewContentAlignment.MiddleCenter,
+                        Padding = new Padding(4),
+                        SelectionBackColor = Color.FromArgb(192, 57, 43),
+                        SelectionForeColor = Color.White,
+                    },
+                }
+            );
         }
 
         private async void LoadOrders()
@@ -207,21 +228,94 @@ namespace Presentation.Forms
             }
         }
 
-        private void dgvOrders_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvOrders_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
-                return;
-            if (e.ColumnIndex != dgvOrders.Columns["Details"].Index)
                 return;
 
             int orderId = Convert.ToInt32(
                 dgvOrders.Rows[e.RowIndex].Cells["ID"].Value?.ToString()?.Replace("#", "")
             );
-            var order = _loadedOrders.FirstOrDefault(o => o.ID == orderId);
-            if (order == null)
-                return;
 
-            new OrderDetailsForm(order).ShowDialog();
+            if (e.ColumnIndex == dgvOrders.Columns["Details"].Index)
+            {
+                var order = _loadedOrders.FirstOrDefault(o => o.ID == orderId);
+                if (order == null)
+                    return;
+
+                new OrderDetailsForm(order).ShowDialog();
+            }
+            else if (e.ColumnIndex == dgvOrders.Columns["Cancel"].Index)
+            {
+                var order = _loadedOrders.FirstOrDefault(o => o.ID == orderId);
+                if (order == null)
+                    return;
+
+                if (order.Status == Domain.Entities.OrderStatus.Shipped)
+                {
+                    MessageBox.Show(
+                        "Cannot cancel a shipped order.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                if (order.Status == Domain.Entities.OrderStatus.Cancelled)
+                {
+                    MessageBox.Show(
+                        "This order is already cancelled.",
+                        "Info",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
+                if (order.Status == Domain.Entities.OrderStatus.Delivered)
+                {
+                    MessageBox.Show(
+                        "Cannot cancel a delivered order.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                var result = MessageBox.Show(
+                    $"Are you sure you want to cancel Order #{orderId}?",
+                    "Confirm Cancel",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result != DialogResult.Yes)
+                    return;
+
+                try
+                {
+                    await _orderService.CancelOrderAsync(orderId);
+                    MessageBox.Show(
+                        "Order cancelled successfully!",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    LoadOrders();
+                }
+                catch (Exception ex)
+                {
+                    var msg = ex.InnerException?.Message ?? ex.Message;
+                    MessageBox.Show(
+                        $"Error: {msg}",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
         }
 
         private void MyOrdersForm_Load(object sender, EventArgs e)

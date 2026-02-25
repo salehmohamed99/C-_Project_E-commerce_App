@@ -10,5 +10,7 @@ namespace Application.Interfaces.Services
         ProductDto Create(CreateProductDto dto);
         ProductDto Update(int id, UpdateProductDto dto);
         void Delete(int id);
+        void Activate(int id);
+        void Deactivate(int id);
     }
 }

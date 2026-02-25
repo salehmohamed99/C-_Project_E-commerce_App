@@ -25,7 +25,36 @@ namespace Presentation.Forms
             IProductRepository productRepository = new ProductRepository(_context);
             _categoryRepository = new CategoryRepository(_context);
             _productService = new ProductAdminService(productRepository, _categoryRepository);
-            LoadCategoryCombo();
+
+            // Replace inline inputs with a single "Add Product" button
+            pnlInputs.Controls.Clear();
+            var btnAddNew = new Button
+            {
+                Text = "+ Add New Product",
+                Location = new Point(12, 12),
+                Size = new Size(200, 45),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(39, 174, 96),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                Cursor = Cursors.Hand,
+            };
+            btnAddNew.FlatAppearance.BorderSize = 0;
+            btnAddNew.Click += (s, e) =>
+            {
+                using var form = new AddEditProductForm(_productService, _categoryRepository);
+                if (form.ShowDialog() == DialogResult.OK)
+                    LoadProducts();
+            };
+            pnlInputs.Size = new Size(pnlInputs.Width, 70);
+            pnlInputs.Controls.Add(btnAddNew);
+
+            // Adjust grid position and anchor to fill space
+            dgvProducts.Location = new Point(25, 160);
+            dgvProducts.Size = new Size(1050, 520);
+            dgvProducts.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvProducts.ScrollBars = ScrollBars.Both;
+
             LoadProducts();
         }
 
@@ -106,6 +135,33 @@ namespace Presentation.Forms
                 }
             );
             dgvProducts.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "Status",
+                    HeaderText = "Status",
+                    Width = 80,
+                }
+            );
+            dgvProducts.Columns.Add(
+                new DataGridViewButtonColumn
+                {
+                    Name = "ToggleStatus",
+                    HeaderText = "",
+                    Text = "Toggle",
+                    UseColumnTextForButtonValue = true,
+                    Width = 90,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = Color.FromArgb(243, 156, 18),
+                        ForeColor = Color.White,
+                        Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                        SelectionBackColor = Color.FromArgb(211, 133, 9),
+                        SelectionForeColor = Color.White,
+                    },
+                }
+            );
+            dgvProducts.Columns.Add(
                 new DataGridViewButtonColumn
                 {
                     Name = "Edit",
@@ -145,32 +201,35 @@ namespace Presentation.Forms
             );
         }
 
-        private void LoadCategoryCombo()
-        {
-            cbCategory.Items.Clear();
-            cbCategory.Items.Add("-- Select Category --");
-            var categories = _categoryRepository.GetAllEntitys().Where(c => !c.IsDeleted).ToList();
-            foreach (var cat in categories)
-                cbCategory.Items.Add(cat.Name);
-            cbCategory.SelectedIndex = 0;
-        }
-
         private void LoadProducts()
         {
             dgvProducts.Rows.Clear();
             var products = _productService.GetAll().ToList();
             foreach (var product in products)
             {
-                dgvProducts.Rows.Add(
+                int rowIdx = dgvProducts.Rows.Add(
                     product.ID,
                     LoadProductImage(product.Image),
                     product.Name,
                     product.Price,
                     product.CategoryName ?? "N/A",
                     product.UnitsInStock,
+                    product.IsActive ? "Active" : "Inactive",
+                    product.IsActive ? "Deactivate" : "Activate",
                     "Edit",
                     "Delete"
                 );
+                var row = dgvProducts.Rows[rowIdx];
+                row.Cells["Status"].Style.ForeColor = product.IsActive
+                    ? Color.FromArgb(39, 174, 96)
+                    : Color.FromArgb(231, 76, 60);
+                row.Cells["Status"].Style.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+
+                if (!product.IsActive)
+                {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(240, 230, 230);
+                    row.DefaultCellStyle.ForeColor = Color.FromArgb(160, 160, 160);
+                }
             }
         }
 
@@ -209,104 +268,6 @@ namespace Presentation.Forms
             return bmp;
         }
 
-        private void btnBrowseImage_Click(object sender, EventArgs e)
-        {
-            using var dlg = new OpenFileDialog
-            {
-                Title = "Select Product Image",
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif",
-            };
-            if (dlg.ShowDialog() == DialogResult.OK)
-                txtImage.Text = dlg.FileName;
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtName.Text) || cbCategory.SelectedIndex == 0)
-            {
-                MessageBox.Show(
-                    "Please fill required fields!",
-                    "Validation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
-
-            var categories = _categoryRepository.GetAllEntitys().Where(c => !c.IsDeleted).ToList();
-            var selectedCategory = categories.ElementAtOrDefault(cbCategory.SelectedIndex - 1);
-            if (selectedCategory == null)
-                return;
-
-            try
-            {
-                if (_editingProductId > 0)
-                {
-                    var dto = new UpdateProductDto
-                    {
-                        Name = txtName.Text,
-                        Price = decimal.TryParse(txtPrice.Text, out var p2) ? p2 : 0,
-                        Description = txtDescription.Text,
-                        Units_In_Stock = int.TryParse(txtUnits.Text, out var u2) ? u2 : 0,
-                        Image = txtImage.Text,
-                        CategoryId = selectedCategory.ID,
-                    };
-                    _productService.Update(_editingProductId, dto);
-                    MessageBox.Show(
-                        "Product updated successfully!",
-                        "Success",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                }
-                else
-                {
-                    var dto = new CreateProductDto
-                    {
-                        Name = txtName.Text,
-                        Price = decimal.TryParse(txtPrice.Text, out var p) ? p : 0,
-                        Description = txtDescription.Text,
-                        Units_In_Stock = int.TryParse(txtUnits.Text, out var u) ? u : 0,
-                        Image = txtImage.Text,
-                        CategoryId = selectedCategory.ID,
-                    };
-                    _productService.Create(dto);
-                    MessageBox.Show(
-                        "Product added successfully!",
-                        "Success",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                }
-
-                ClearInputs();
-                LoadProducts();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Error: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
-        }
-
-        private int _editingProductId = 0;
-
-        private void ClearInputs()
-        {
-            _editingProductId = 0;
-            txtName.Clear();
-            txtPrice.Clear();
-            txtDescription.Clear();
-            txtUnits.Clear();
-            txtImage.Clear();
-            cbCategory.SelectedIndex = 0;
-            btnAdd.Text = "Add Product";
-        }
-
         private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -316,24 +277,52 @@ namespace Presentation.Forms
 
             if (e.ColumnIndex == dgvProducts.Columns["Edit"].Index)
             {
-                _editingProductId = productId;
-                txtName.Text = dgvProducts.Rows[e.RowIndex].Cells["Name"].Value?.ToString() ?? "";
-                txtPrice.Text = dgvProducts.Rows[e.RowIndex].Cells["Price"].Value?.ToString() ?? "";
-                txtUnits.Text = dgvProducts.Rows[e.RowIndex].Cells["Stock"].Value?.ToString() ?? "";
+                var product = _productService.GetById(productId);
+                using var form = new AddEditProductForm(_productService, _categoryRepository, product);
+                if (form.ShowDialog() == DialogResult.OK)
+                    LoadProducts();
+            }
+            else if (e.ColumnIndex == dgvProducts.Columns["ToggleStatus"].Index)
+            {
+                var name = dgvProducts.Rows[e.RowIndex].Cells["Name"].Value?.ToString() ?? "";
+                var statusText = dgvProducts.Rows[e.RowIndex].Cells["Status"].Value?.ToString();
+                bool isActive = statusText == "Active";
+                var action = isActive ? "deactivate" : "activate";
 
-                var catName =
-                    dgvProducts.Rows[e.RowIndex].Cells["Category"].Value?.ToString() ?? "";
-                for (int i = 0; i < cbCategory.Items.Count; i++)
+                var result = MessageBox.Show(
+                    $"Are you sure you want to {action} '{name}'?",
+                    "Confirm Status Change",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result != DialogResult.Yes)
+                    return;
+
+                try
                 {
-                    if (cbCategory.Items[i].ToString() == catName)
-                    {
-                        cbCategory.SelectedIndex = i;
-                        break;
-                    }
-                }
+                    if (isActive)
+                        _productService.Deactivate(productId);
+                    else
+                        _productService.Activate(productId);
 
-                btnAdd.Text = "Update Product";
-                txtName.Focus();
+                    MessageBox.Show(
+                        $"Product {action}d successfully!",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    LoadProducts();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Error: {ex.Message}",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
             }
             else if (e.ColumnIndex == dgvProducts.Columns["Delete"].Index)
             {

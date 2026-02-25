@@ -267,8 +267,11 @@ namespace Presentation.Forms
             if (e.ColumnIndex == dgvCart.Columns["Update"].Index)
             {
                 var currentQty = Convert.ToInt32(dgvCart.Rows[e.RowIndex].Cells["Quantity"].Value);
+                var product = _productRepository.GetAllEntitys().FirstOrDefault(p => p.ID == productId);
+                int maxQty = (product?.UnitsInStock ?? 0) + currentQty;
+
                 var input = ShowInputDialog(
-                    "Enter new quantity:",
+                    $"Enter new quantity (max {maxQty}):",
                     "Update Quantity",
                     currentQty.ToString()
                 );
@@ -278,8 +281,19 @@ namespace Presentation.Forms
                 if (!int.TryParse(input, out var newQty) || newQty < 1)
                 {
                     MessageBox.Show(
-                        "Please enter a valid quantity!",
+                        "Please enter a valid quantity (minimum 1).",
                         "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                if (newQty > maxQty)
+                {
+                    MessageBox.Show(
+                        $"Quantity exceeds available stock. Maximum allowed: {maxQty}.",
+                        "Validation Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
                     );

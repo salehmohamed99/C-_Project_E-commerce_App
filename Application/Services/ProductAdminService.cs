@@ -25,7 +25,6 @@ namespace Application.Services
         {
             return _productRepository
                 .GetAllEntitys()
-                .Where(p => p.IsActive)
                 .Select(p => new ProductDto
                 {
                     ID = p.ID,
@@ -70,7 +69,7 @@ namespace Application.Services
             if (product == null)
                 throw new KeyNotFoundException($"Product with Id {id} not found.");
 
-            product.IsDeleted = true;
+            product.Deactivate();
             _productRepository.Update(product);
             _productRepository.SaveChanges();
         }
@@ -81,7 +80,18 @@ namespace Application.Services
             if (product == null)
                 throw new KeyNotFoundException($"Product with Id {id} not found.");
 
-            product.IsDeleted = false;
+            product.Activate();
+            _productRepository.Update(product);
+            _productRepository.SaveChanges();
+        }
+
+        public void Deactivate(int id)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null)
+                throw new KeyNotFoundException($"Product with Id {id} not found.");
+
+            product.Deactivate();
             _productRepository.Update(product);
             _productRepository.SaveChanges();
         }
@@ -119,7 +129,22 @@ namespace Application.Services
 
         public ProductDto GetById(int id)
         {
-            throw new NotImplementedException();
+            var product = _productRepository.GetById(id);
+            if (product == null)
+                throw new KeyNotFoundException($"Product with Id {id} not found.");
+
+            return new ProductDto
+            {
+                ID = product.ID,
+                Name = product.Name,
+                Image = product.Image,
+                Price = product.Price,
+                Description = product.Description,
+                UnitsInStock = product.UnitsInStock,
+                IsActive = product.IsActive,
+                CategoryId = product.CategoryId,
+                CategoryName = product.category?.Name ?? "N/A",
+            };
         }
     }
 }

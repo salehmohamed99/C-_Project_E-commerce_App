@@ -17,7 +17,8 @@ namespace Application.Mappers
             TypeAdapterConfig<CreateCategoryDto, Category>.NewConfig();
             TypeAdapterConfig<Category, UpdateCategoryDto>.NewConfig();
 
-            TypeAdapterConfig<Product, ProductDto>.NewConfig();
+            TypeAdapterConfig<Product, ProductDto>.NewConfig()
+                .Map(dest => dest.CategoryName, src => src.category != null ? src.category.Name : "");
             TypeAdapterConfig<CreateProductDto, Product>.NewConfig();
             TypeAdapterConfig<Product, UpdateProductDto>.NewConfig();
 

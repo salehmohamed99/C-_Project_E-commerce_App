@@ -2,6 +2,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Application.DTOs;
+using Application.DTOs.ProductDTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
@@ -232,12 +233,11 @@ namespace Presentation.Forms
             if (e.ColumnIndex == dgvProducts.Columns["Details"].Index)
             {
                 var product = _productService.GetById(productId);
-                MessageBox.Show(
-                    $"Name: {product.Name}\nPrice: ${product.Price:F2}\nStock: {product.UnitsInStock}\nCategory: {product.CategoryName}\n\n{product.Description}",
-                    "Product Details",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                var user = _context.Users.FirstOrDefault(u => u.ID == _userId);
+                int cartId = user?.CartID ?? 0;
+                using var detailsForm = new ProductDetailsForm(product, _cartItemService, cartId);
+                if (detailsForm.ShowDialog() == DialogResult.OK)
+                    LoadProducts();
             }
             else if (e.ColumnIndex == dgvProducts.Columns["AddCart"].Index)
             {
@@ -253,9 +253,25 @@ namespace Presentation.Forms
                     return;
                 }
 
+                int stock = Convert.ToInt32(dgvProducts.Rows[e.RowIndex].Cells["Stock"].Value);
+                if (stock <= 0)
+                {
+                    MessageBox.Show(
+                        "This product is out of stock!",
+                        "Validation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                var input = ShowQuantityDialog(stock);
+                if (input == null)
+                    return;
+
                 try
                 {
-                    var dto = new AddCartItemDto { ProductId = productId, Quantity = 1 };
+                    var dto = new AddCartItemDto { ProductId = productId, Quantity = input.Value };
                     _cartItemService.AddItem(user.CartID, dto);
                     MessageBox.Show(
                         "Product added to cart!",
@@ -280,5 +296,64 @@ namespace Presentation.Forms
         private void btnRefresh_Click(object sender, EventArgs e) => LoadProducts();
 
         private void btnClose_Click(object sender, EventArgs e) => this.Close();
+
+        private static int? ShowQuantityDialog(int maxStock)
+        {
+            var form = new Form
+            {
+                Text = "Enter Quantity",
+                Width = 320,
+                Height = 180,
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+            };
+            var lbl = new Label
+            {
+                Text = $"Quantity (max {maxStock}):",
+                Left = 10,
+                Top = 15,
+                Width = 280,
+                Font = new Font("Segoe UI", 10F),
+            };
+            var nud = new NumericUpDown
+            {
+                Left = 10,
+                Top = 45,
+                Width = 280,
+                Minimum = 1,
+                Maximum = maxStock,
+                Value = 1,
+                Font = new Font("Segoe UI", 10F),
+            };
+            var btnOk = new Button
+            {
+                Text = "Add to Cart",
+                Left = 100,
+                Top = 90,
+                Width = 100,
+                Height = 35,
+                DialogResult = DialogResult.OK,
+                BackColor = Color.FromArgb(39, 174, 96),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+            };
+            btnOk.FlatAppearance.BorderSize = 0;
+            var btnCancel = new Button
+            {
+                Text = "Cancel",
+                Left = 210,
+                Top = 90,
+                Width = 80,
+                Height = 35,
+                DialogResult = DialogResult.Cancel,
+            };
+            form.AcceptButton = btnOk;
+            form.CancelButton = btnCancel;
+            form.Controls.AddRange([lbl, nud, btnOk, btnCancel]);
+            return form.ShowDialog() == DialogResult.OK ? (int)nud.Value : null;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
@@ -25,7 +26,13 @@ namespace Application.Services
 
         public IQueryable<ProductDto> GetAll()
         {
-            return _productRepository.GetAllEntitys().ToList().Adapt<List<ProductDto>>().AsQueryable();
+            return _productRepository
+                .GetAllEntitys()
+                .Include(p => p.category)
+                .Where(p => p.IsActive && !p.IsDeleted)
+                .ToList()
+                .Adapt<List<ProductDto>>()
+                .AsQueryable();
         }
 
         public ProductDto GetById(int id)

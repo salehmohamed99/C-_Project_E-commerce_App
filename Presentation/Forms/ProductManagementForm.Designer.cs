@@ -162,7 +162,6 @@ namespace Presentation.Forms
             this.btnBrowseImage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnBrowseImage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBrowseImage.FlatAppearance.BorderSize = 0;
-            this.btnBrowseImage.Click += new System.EventHandler(this.btnBrowseImage_Click);
 
             // Add button inside panel
             this.btnAdd.Text = "Add Product";
@@ -174,7 +173,6 @@ namespace Presentation.Forms
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAdd.FlatAppearance.BorderSize = 0;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
 
             this.pnlInputs.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.lblName, this.txtName,
@@ -233,7 +231,7 @@ namespace Presentation.Forms
             //  Close Button
             // ???????????????????????????????????????
             this.btnClose.Text = "Close";
-            this.btnClose.Location = new System.Drawing.Point(825, 580);
+            this.btnClose.Location = new System.Drawing.Point(955, 695);
             this.btnClose.Size = new System.Drawing.Size(120, 40);
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.BackColor = System.Drawing.Color.FromArgb(45, 62, 80);
@@ -241,15 +239,17 @@ namespace Presentation.Forms
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.FlatAppearance.BorderSize = 0;
+            this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
 
             // ???????????????????????????????????????
             //  ProductManagementForm
             // ???????????????????????????????????????
-            this.ClientSize = new System.Drawing.Size(970, 635);
+            this.ClientSize = new System.Drawing.Size(1100, 750);
             this.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.MinimumSize = new System.Drawing.Size(900, 500);
+            this.MaximizeBox = true;
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlInputs);
             this.Controls.Add(this.dgvProducts);

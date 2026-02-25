@@ -94,9 +94,8 @@ namespace Application.Services
             if (cartItem == null)
                 return null;
             var product = _productRepository.GetAllEntitys().FirstOrDefault(p => p.ID == productId);
-            //if (product == null)
-            //    throw new Exception("Product not found");
             product.UnitsInStock += cartItem.Quantity;
+            product.UnitsInStock -= dto.Quantity;
             cartItem.Quantity = dto.Quantity;
             _cartItemRepository.Update(cartItem);
             _cartItemRepository.SaveChanges();

@@ -24,7 +24,8 @@ namespace Presentation.Forms
             IOrderRepository orderRepository = new Infrastructure.Repositories.OrderRepository(_context);
             IGenericRepository<Cart, int> cartRepository = new GenericRepository<Cart, int>(_context);
             IGenericRepository<CartItem, int> cartItemRepository = new GenericRepository<CartItem, int>(_context);
-            _orderService = new OrderService(orderRepository, cartItemRepository);
+            IProductRepository productRepository = new ProductRepository(_context);
+            _orderService = new OrderService(orderRepository, cartItemRepository, productRepository);
             _cartService = new CartServices(cartRepository);
             LoadOrderSummary();
         }

@@ -22,13 +22,14 @@ namespace Domain.Entities
 
         public void Deactivate()
         {
-            
             IsActive = false;
+            IsDeleted = true;
         }
 
         public void Activate()
         {
-             IsActive = true;
+            IsActive = true;
+            IsDeleted = false;
         }
 
         public void UpdatePrice(decimal newPrice)

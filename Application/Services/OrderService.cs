@@ -20,10 +20,11 @@ namespace Application.Services
         public IOrderRepository OrderRepository { get; set; }
         public IProductRepository productRepository { get; set; }
         public IGenericRepository<CartItem, int> CartItemRepository { get; set; }
-        public OrderService(IOrderRepository orderRepo, IGenericRepository<CartItem, int> cartItemRepo)
+        public OrderService(IOrderRepository orderRepo, IGenericRepository<CartItem, int> cartItemRepo, IProductRepository productRepo = null)
         {
             OrderRepository = orderRepo;
             CartItemRepository = cartItemRepo;
+            productRepository = productRepo;
         }
 
        public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid, int userId, string shippingAddress)
@@ -179,6 +180,13 @@ namespace Application.Services
                 throw new InvalidOperationException("Order Already Shipped.");
 
             order.Status = OrderStatus.Cancelled;
+
+            foreach (var item in order.OrderProducts)
+            {
+                if (item.product != null)
+                    item.product.UnitsInStock += item.Quantity;
+            }
+
             OrderRepository.Update(order);
             await Task.Run(() => OrderRepository.SaveChanges());
         }

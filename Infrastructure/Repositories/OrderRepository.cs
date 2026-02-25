@@ -46,6 +46,7 @@ namespace Infrastructure.Repositories
         {
             return _context
                 .Orders.Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.product)
                 .Include(o => o.User)
                 .FirstOrDefault(o => o.ID == id);
         }

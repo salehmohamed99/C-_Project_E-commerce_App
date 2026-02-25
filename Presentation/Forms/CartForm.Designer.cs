@@ -124,7 +124,7 @@ namespace Presentation.Forms
             this.btnClear.Click    += new System.EventHandler(this.btnClear_Click);
 
             // btnContinue
-            this.btnContinue.Text      = "Continue Shopping";
+            this.btnContinue.Text      = "Back";
             this.btnContinue.Location  = new System.Drawing.Point(540, 18);
             this.btnContinue.Size      = new System.Drawing.Size(140, 42);
             this.btnContinue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

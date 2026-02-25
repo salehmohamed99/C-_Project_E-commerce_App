@@ -11,6 +11,6 @@ namespace Application.DTOs.ProductDTOs
         public decimal Price { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }
-        public int Units_In_Stock { get; set; }
+        public int UnitsInStock { get; set; }
     }
 }
