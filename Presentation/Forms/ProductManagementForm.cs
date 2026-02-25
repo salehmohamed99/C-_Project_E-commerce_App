@@ -36,21 +36,21 @@ namespace Presentation.Forms
             {
                 BackColor = Color.FromArgb(45, 62, 80),
                 ForeColor = Color.White,
-                Font      = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
+                Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
                 Alignment = DataGridViewContentAlignment.MiddleCenter,
-                Padding   = new Padding(0)
+                Padding = new Padding(0)
             };
             dgvProducts.DefaultCellStyle = new DataGridViewCellStyle
             {
-                Font               = new Font("Segoe UI", 9.75F),
-                Padding            = new Padding(4),
-                Alignment          = DataGridViewContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 9.75F),
+                Padding = new Padding(4),
+                Alignment = DataGridViewContentAlignment.MiddleCenter,
                 SelectionBackColor = Color.FromArgb(214, 234, 248),
                 SelectionForeColor = Color.FromArgb(45, 62, 80)
             };
             dgvProducts.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
             {
-                BackColor          = Color.FromArgb(245, 247, 250),
+                BackColor = Color.FromArgb(245, 247, 250),
                 SelectionBackColor = Color.FromArgb(214, 234, 248),
                 SelectionForeColor = Color.FromArgb(45, 62, 80)
             };
@@ -59,8 +59,10 @@ namespace Presentation.Forms
             dgvProducts.Columns.Add(new DataGridViewTextBoxColumn { Name = "ID", HeaderText = "ID", Width = 50 });
             dgvProducts.Columns.Add(new DataGridViewImageColumn
             {
-                Name = "Image", HeaderText = "Image",
-                ImageLayout = DataGridViewImageCellLayout.Zoom, Width = 70
+                Name = "Image",
+                HeaderText = "Image",
+                ImageLayout = DataGridViewImageCellLayout.Zoom,
+                Width = 70
             });
             dgvProducts.Columns.Add(new DataGridViewTextBoxColumn { Name = "Name", HeaderText = "Name", Width = 170 });
             dgvProducts.Columns.Add(new DataGridViewTextBoxColumn { Name = "Price", HeaderText = "Price", Width = 100 });
@@ -68,26 +70,36 @@ namespace Presentation.Forms
             dgvProducts.Columns.Add(new DataGridViewTextBoxColumn { Name = "Stock", HeaderText = "Stock", Width = 80 });
             dgvProducts.Columns.Add(new DataGridViewButtonColumn
             {
-                Name = "Edit", HeaderText = "", Text = "Edit",
-                UseColumnTextForButtonValue = true, Width = 100,
+                Name = "Edit",
+                HeaderText = "",
+                Text = "Edit",
+                UseColumnTextForButtonValue = true,
+                Width = 100,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    BackColor = Color.FromArgb(52, 152, 219), ForeColor = Color.White,
+                    BackColor = Color.FromArgb(52, 152, 219),
+                    ForeColor = Color.White,
                     Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                    SelectionBackColor = Color.FromArgb(41, 128, 185), SelectionForeColor = Color.White
+                    SelectionBackColor = Color.FromArgb(41, 128, 185),
+                    SelectionForeColor = Color.White
                 }
             });
             dgvProducts.Columns.Add(new DataGridViewButtonColumn
             {
-                Name = "Delete", HeaderText = "", Text = "Delete",
-                UseColumnTextForButtonValue = true, Width = 110,
+                Name = "Delete",
+                HeaderText = "",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true,
+                Width = 110,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    BackColor = Color.FromArgb(231, 76, 60), ForeColor = Color.White,
+                    BackColor = Color.FromArgb(231, 76, 60),
+                    ForeColor = Color.White,
                     Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                    SelectionBackColor = Color.FromArgb(192, 57, 43), SelectionForeColor = Color.White
+                    SelectionBackColor = Color.FromArgb(192, 57, 43),
+                    SelectionForeColor = Color.White
                 }
             });
         }
@@ -155,7 +167,7 @@ namespace Presentation.Forms
         {
             using var dlg = new OpenFileDialog
             {
-                Title  = "Select Product Image",
+                Title = "Select Product Image",
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif"
             };
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -189,7 +201,7 @@ namespace Presentation.Forms
                         Image = txtImage.Text,
                         CategoryId = selectedCategory.ID
                     };
-                    _productService.Update(_editingProductId, dto);
+                    _productService.Update(_editingProductId,  dto);
                     MessageBox.Show("Product updated successfully!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
