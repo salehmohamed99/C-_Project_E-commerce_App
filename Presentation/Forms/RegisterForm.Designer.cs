@@ -50,24 +50,34 @@ namespace Presentation.Forms
             this.btnCancel   = new System.Windows.Forms.Button();
             this.SuspendLayout();
 
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
+            //  PALETTE
+            // ??????????????????????????????????????????????????????????????????
+            var clrDark = System.Drawing.Color.FromArgb(30, 42, 56);
+            var clrAccent = System.Drawing.Color.FromArgb(52, 152, 219);
+            var clrBg = System.Drawing.Color.White;
+            var clrFieldBg = System.Drawing.Color.FromArgb(244, 247, 250);
+            var clrTextPrimary = System.Drawing.Color.FromArgb(30, 42, 56);
+            var clrTextMuted = System.Drawing.Color.FromArgb(149, 165, 166);
+
+            // ??????????????????????????????????????????????????????????????????
             //  Header Panel
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
             this.pnlHeader.Dock      = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Height    = 80;
-            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.pnlHeader.Height    = 100;
+            this.pnlHeader.BackColor = clrBg;
 
             this.lblTitle.Text      = "Create Account";
-            this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location  = new System.Drawing.Point(25, 12);
+            this.lblTitle.Font      = new System.Drawing.Font("Georgia", 22F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = clrTextPrimary;
+            this.lblTitle.Location  = new System.Drawing.Point(40, 20);
             this.lblTitle.AutoSize  = true;
             this.lblTitle.BackColor = System.Drawing.Color.Transparent;
 
             this.lblSubtitle.Text      = "Fill in your details to get started";
             this.lblSubtitle.Font      = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(189, 195, 199);
-            this.lblSubtitle.Location  = new System.Drawing.Point(27, 50);
+            this.lblSubtitle.ForeColor = clrTextMuted;
+            this.lblSubtitle.Location  = new System.Drawing.Point(45, 60);
             this.lblSubtitle.AutoSize  = true;
             this.lblSubtitle.BackColor = System.Drawing.Color.Transparent;
 
@@ -76,119 +86,125 @@ namespace Presentation.Forms
 
             int fieldLeft  = 45;
             int fieldWidth = 380;
-            int startY     = 105;
-            int rowHeight  = 62;
+            int startY     = 110;
+            int rowHeight  = 65;
 
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
             //  Form Fields
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
 
             // Full Name
-            this.lblName.Text      = "Full Name *";
-            this.lblName.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblName.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblName.Text      = "FULL NAME *";
+            this.lblName.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblName.ForeColor = clrTextPrimary;
             this.lblName.Location  = new System.Drawing.Point(fieldLeft, startY);
             this.lblName.AutoSize  = true;
 
-            this.txtName.Location    = new System.Drawing.Point(fieldLeft, startY + 24);
-            this.txtName.Size        = new System.Drawing.Size(fieldWidth, 30);
-            this.txtName.Font        = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtName.Location    = new System.Drawing.Point(fieldLeft, startY + 20);
+            this.txtName.Size        = new System.Drawing.Size(fieldWidth, 32);
+            this.txtName.Font        = new System.Drawing.Font("Segoe UI", 11F);
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtName.BackColor   = clrFieldBg;
 
             // Username
-            this.lblUsername.Text      = "Username *";
-            this.lblUsername.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblUsername.Text      = "USERNAME *";
+            this.lblUsername.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblUsername.ForeColor = clrTextPrimary;
             this.lblUsername.Location  = new System.Drawing.Point(fieldLeft, startY + rowHeight);
             this.lblUsername.AutoSize  = true;
 
-            this.txtUsername.Location    = new System.Drawing.Point(fieldLeft, startY + rowHeight + 24);
-            this.txtUsername.Size        = new System.Drawing.Size(fieldWidth, 30);
-            this.txtUsername.Font        = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtUsername.Location    = new System.Drawing.Point(fieldLeft, startY + rowHeight + 20);
+            this.txtUsername.Size        = new System.Drawing.Size(fieldWidth, 32);
+            this.txtUsername.Font        = new System.Drawing.Font("Segoe UI", 11F);
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtUsername.BackColor   = clrFieldBg;
 
             // Email
-            this.lblEmail.Text      = "Email  *";
-            this.lblEmail.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblEmail.Text      = "EMAIL *";
+            this.lblEmail.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblEmail.ForeColor = clrTextPrimary;
             this.lblEmail.Location  = new System.Drawing.Point(fieldLeft, startY + 2 * rowHeight);
             this.lblEmail.AutoSize  = true;
 
-            this.txtEmail.Location    = new System.Drawing.Point(fieldLeft, startY + 2 * rowHeight + 24);
-            this.txtEmail.Size        = new System.Drawing.Size(fieldWidth, 30);
-            this.txtEmail.Font        = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtEmail.Location    = new System.Drawing.Point(fieldLeft, startY + 2 * rowHeight + 20);
+            this.txtEmail.Size        = new System.Drawing.Size(fieldWidth, 32);
+            this.txtEmail.Font        = new System.Drawing.Font("Segoe UI", 11F);
             this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtEmail.BackColor   = clrFieldBg;
 
             // Password
-            this.lblPassword.Text      = "Password *";
-            this.lblPassword.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblPassword.Text      = "PASSWORD *";
+            this.lblPassword.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblPassword.ForeColor = clrTextPrimary;
             this.lblPassword.Location  = new System.Drawing.Point(fieldLeft, startY + 3 * rowHeight);
             this.lblPassword.AutoSize  = true;
 
-            this.txtPassword.Location            = new System.Drawing.Point(fieldLeft, startY + 3 * rowHeight + 24);
-            this.txtPassword.Size                = new System.Drawing.Size(fieldWidth, 30);
-            this.txtPassword.Font                = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtPassword.Location            = new System.Drawing.Point(fieldLeft, startY + 3 * rowHeight + 20);
+            this.txtPassword.Size                = new System.Drawing.Size(fieldWidth, 32);
+            this.txtPassword.Font                = new System.Drawing.Font("Segoe UI", 11F);
             this.txtPassword.BorderStyle         = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPassword.BackColor           = clrFieldBg;
             this.txtPassword.UseSystemPasswordChar = true;
 
             // Phone
-            this.lblPhone.Text      = "Phone";
-            this.lblPhone.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblPhone.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblPhone.Text      = "PHONE";
+            this.lblPhone.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblPhone.ForeColor = clrTextPrimary;
             this.lblPhone.Location  = new System.Drawing.Point(fieldLeft, startY + 4 * rowHeight);
             this.lblPhone.AutoSize  = true;
 
-            this.txtPhone.Location    = new System.Drawing.Point(fieldLeft, startY + 4 * rowHeight + 24);
-            this.txtPhone.Size        = new System.Drawing.Size(fieldWidth, 30);
-            this.txtPhone.Font        = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtPhone.Location    = new System.Drawing.Point(fieldLeft, startY + 4 * rowHeight + 20);
+            this.txtPhone.Size        = new System.Drawing.Size(fieldWidth, 32);
+            this.txtPhone.Font        = new System.Drawing.Font("Segoe UI", 11F);
             this.txtPhone.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPhone.BackColor   = clrFieldBg;
 
             // Address
-            this.lblAddress.Text      = "Address";
-            this.lblAddress.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblAddress.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
+            this.lblAddress.Text      = "ADDRESS";
+            this.lblAddress.Font      = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblAddress.ForeColor = clrTextPrimary;
             this.lblAddress.Location  = new System.Drawing.Point(fieldLeft, startY + 5 * rowHeight);
             this.lblAddress.AutoSize  = true;
 
-            this.txtAddress.Location    = new System.Drawing.Point(fieldLeft, startY + 5 * rowHeight + 24);
-            this.txtAddress.Size        = new System.Drawing.Size(fieldWidth, 30);
-            this.txtAddress.Font        = new System.Drawing.Font("Segoe UI", 10.5F);
+            this.txtAddress.Location    = new System.Drawing.Point(fieldLeft, startY + 5 * rowHeight + 20);
+            this.txtAddress.Size        = new System.Drawing.Size(fieldWidth, 32);
+            this.txtAddress.Font        = new System.Drawing.Font("Segoe UI", 11F);
             this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtAddress.BackColor   = clrFieldBg;
 
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
             //  Buttons
-            // ???????????????????????????????????????
-            int btnY = startY + 6 * rowHeight + 18;
+            // ??????????????????????????????????????????????????????????????????
+            int btnY = startY + 6 * rowHeight + 20;
 
-            this.btnRegister.Text      = "Create Account";
+            this.btnRegister.Text      = "CREATE ACCOUNT";
             this.btnRegister.Location  = new System.Drawing.Point(fieldLeft, btnY);
-            this.btnRegister.Size      = new System.Drawing.Size(185, 45);
+            this.btnRegister.Size      = new System.Drawing.Size(380, 48);
             this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRegister.BackColor = System.Drawing.Color.FromArgb(39, 174, 96);
+            this.btnRegister.BackColor = clrDark;
             this.btnRegister.ForeColor = System.Drawing.Color.White;
-            this.btnRegister.Font      = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnRegister.Font      = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnRegister.Cursor    = System.Windows.Forms.Cursors.Hand;
             this.btnRegister.FlatAppearance.BorderSize = 0;
             this.btnRegister.Click    += new System.EventHandler(this.btnRegister_Click);
 
             this.btnCancel.Text      = "Cancel";
-            this.btnCancel.Location  = new System.Drawing.Point(fieldLeft + 200, btnY);
-            this.btnCancel.Size      = new System.Drawing.Size(180, 45);
+            this.btnCancel.Location  = new System.Drawing.Point(fieldLeft, btnY + 60);
+            this.btnCancel.Size      = new System.Drawing.Size(380, 40);
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancel.BackColor = System.Drawing.Color.White;
-            this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(45, 62, 80);
-            this.btnCancel.Font      = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnCancel.BackColor = clrBg;
+            this.btnCancel.ForeColor = clrTextPrimary;
+            this.btnCancel.Font      = new System.Drawing.Font("Segoe UI", 10F);
             this.btnCancel.Cursor    = System.Windows.Forms.Cursors.Hand;
-            this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(189, 195, 199);
-            this.btnCancel.FlatAppearance.BorderSize  = 2;
+            this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(200, 210, 220);
+            this.btnCancel.FlatAppearance.BorderSize  = 1;
             this.btnCancel.Click    += new System.EventHandler(this.btnCancel_Click);
 
-            // ???????????????????????????????????????
+            // ??????????????????????????????????????????????????????????????????
             //  RegisterForm
-            // ???????????????????????????????????????
-            this.ClientSize      = new System.Drawing.Size(470, btnY + 65);
-            this.BackColor       = System.Drawing.Color.FromArgb(245, 247, 250);
+            // ??????????????????????????????????????????????????????????????????
+            this.ClientSize      = new System.Drawing.Size(470, btnY + 130);
+            this.BackColor       = clrBg;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox     = false;
             this.Controls.Add(this.pnlHeader);

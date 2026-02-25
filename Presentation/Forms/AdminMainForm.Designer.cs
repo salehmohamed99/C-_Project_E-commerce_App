@@ -186,7 +186,7 @@ namespace Presentation.Forms
         private System.Windows.Forms.Panel pnlCardCategories;
         private System.Windows.Forms.Panel pnlCardProducts;
         private System.Windows.Forms.Panel pnlCardOrders;
-        private System.Windows.Forms.Panel pnlCardRevenue;
+        //private System.Windows.Forms.Panel pnlCardRevenue;
 
         // ── Quick Action Buttons ───────────────────────────────────────────────
         private System.Windows.Forms.Button btnQuickCategories;
@@ -245,7 +245,7 @@ namespace Presentation.Forms
             this.pnlCardCategories = new System.Windows.Forms.Panel();
             this.pnlCardProducts = new System.Windows.Forms.Panel();
             this.pnlCardOrders = new System.Windows.Forms.Panel();
-            this.pnlCardRevenue = new System.Windows.Forms.Panel();
+            //this.pnlCardRevenue = new System.Windows.Forms.Panel();
 
             this.tmrClock = new System.Windows.Forms.Timer(this.components);
 
@@ -531,10 +531,10 @@ namespace Presentation.Forms
 
                 var lblValue = new System.Windows.Forms.Label();
                 lblValue.Text = value;
-                lblValue.Font = new System.Drawing.Font("Segoe UI Semibold", 22F, System.Drawing.FontStyle.Bold);
+                lblValue.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
                 lblValue.ForeColor = clrTextPrimary;
                 lblValue.Location = new System.Drawing.Point(12, 66);
-                lblValue.Size = new System.Drawing.Size(130, 38);
+                lblValue.AutoSize = true;
                 lblValue.BackColor = System.Drawing.Color.Transparent;
 
                 var pnlAccentBar = new System.Windows.Forms.Panel();
@@ -556,7 +556,7 @@ namespace Presentation.Forms
             this.pnlCardCategories = MakeStatCard("▤", "Categories", "—", "", System.Drawing.Color.FromArgb(99, 102, 241), cardLeft, cardTop);
             this.pnlCardProducts = MakeStatCard("⊞", "Products", "—", "", System.Drawing.Color.FromArgb(20, 184, 166), cardLeft + (cw + cardGap), cardTop);
             this.pnlCardOrders = MakeStatCard("◎", "Pending Orders", "—", "", System.Drawing.Color.FromArgb(245, 158, 11), cardLeft + (cw + cardGap) * 2, cardTop);
-            this.pnlCardRevenue = MakeStatCard("$", "Revenue", "—", "", System.Drawing.Color.FromArgb(16, 185, 129), cardLeft + (cw + cardGap) * 3, cardTop);
+            //this.pnlCardRevenue = MakeStatCard("$", "Revenue", "—", "", System.Drawing.Color.FromArgb(16, 185, 129), cardLeft + (cw + cardGap) * 3, cardTop);
 
             // ── Quick-action button helper ─────────────────────────────────────
             System.Windows.Forms.Button MakeActionBtn(
@@ -596,7 +596,7 @@ namespace Presentation.Forms
             this.pnlContent.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.lblStatsSection,   this.lblActionsSection,
                 this.pnlCardCategories, this.pnlCardProducts,
-                this.pnlCardOrders,     this.pnlCardRevenue,
+                this.pnlCardOrders,     //.pnlCardRevenue,
                 this.btnQuickCategories,this.btnQuickProducts,
                 this.btnQuickOrders
             });

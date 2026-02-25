@@ -4,7 +4,10 @@ namespace Presentation.Forms
     {
         private System.ComponentModel.IContainer components = null;
 
-        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Panel pnlTopBar;
+        private System.Windows.Forms.Panel pnlTopAccent;
+        private System.Windows.Forms.Panel pnlContent;
+        private System.Windows.Forms.Label lblTitleIcon;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
         private System.Windows.Forms.Button btnBrowse;
@@ -21,139 +24,132 @@ namespace Presentation.Forms
 
         private void InitializeComponent()
         {
-            pnlHeader = new Panel();
-            lblTitle = new Label();
-            lblSubtitle = new Label();
-            btnBrowse = new Button();
-            btnCart = new Button();
-            btnOrders = new Button();
-            btnLogout = new Button();
-            pnlHeader.SuspendLayout();
-            SuspendLayout();
-            // 
-            // pnlHeader
-            // 
-            pnlHeader.BackColor = Color.FromArgb(45, 62, 80);
-            pnlHeader.Controls.Add(lblTitle);
-            pnlHeader.Controls.Add(lblSubtitle);
-            pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(0, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1052, 80);
-            pnlHeader.TabIndex = 0;
-            // 
-            // lblTitle
-            // 
-            lblTitle.AutoSize = true;
-            lblTitle.BackColor = Color.Transparent;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(25, 12);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(314, 41);
-            lblTitle.TabIndex = 0;
-            lblTitle.Text = "Customer Dashboard";
-            // 
-            // lblSubtitle
-            // 
-            lblSubtitle.AutoSize = true;
-            lblSubtitle.BackColor = Color.Transparent;
-            lblSubtitle.Font = new Font("Segoe UI", 9.5F);
-            lblSubtitle.ForeColor = Color.FromArgb(189, 195, 199);
-            lblSubtitle.Location = new Point(27, 50);
-            lblSubtitle.Name = "lblSubtitle";
-            lblSubtitle.Size = new Size(315, 21);
-            lblSubtitle.TabIndex = 1;
-            lblSubtitle.Text = "Welcome! What would you like to do today?";
-            // 
-            // btnBrowse
-            // 
-            btnBrowse.BackColor = Color.White;
-            btnBrowse.Cursor = Cursors.Hand;
-            btnBrowse.FlatAppearance.BorderColor = Color.FromArgb(52, 152, 219);
-            btnBrowse.FlatAppearance.BorderSize = 2;
-            btnBrowse.FlatStyle = FlatStyle.Flat;
-            btnBrowse.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnBrowse.ForeColor = Color.FromArgb(52, 152, 219);
-            btnBrowse.Location = new Point(40, 110);
-            btnBrowse.Name = "btnBrowse";
-            btnBrowse.Size = new Size(240, 100);
-            btnBrowse.TabIndex = 1;
-            btnBrowse.Text = "Browse Products";
-            btnBrowse.UseVisualStyleBackColor = false;
-            btnBrowse.Click += btnBrowse_Click;
-            // 
-            // btnCart
-            // 
-            btnCart.BackColor = Color.White;
-            btnCart.Cursor = Cursors.Hand;
-            btnCart.FlatAppearance.BorderColor = Color.FromArgb(243, 156, 18);
-            btnCart.FlatAppearance.BorderSize = 2;
-            btnCart.FlatStyle = FlatStyle.Flat;
-            btnCart.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnCart.ForeColor = Color.FromArgb(243, 156, 18);
-            btnCart.Location = new Point(550, 110);
-            btnCart.Name = "btnCart";
-            btnCart.Size = new Size(240, 100);
-            btnCart.TabIndex = 2;
-            btnCart.Text = "View Cart";
-            btnCart.UseVisualStyleBackColor = false;
-            btnCart.Click += btnCart_Click;
-            // 
-            // btnOrders
-            // 
-            btnOrders.BackColor = Color.White;
-            btnOrders.Cursor = Cursors.Hand;
-            btnOrders.FlatAppearance.BorderColor = Color.FromArgb(39, 174, 96);
-            btnOrders.FlatAppearance.BorderSize = 2;
-            btnOrders.FlatStyle = FlatStyle.Flat;
-            btnOrders.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnOrders.ForeColor = Color.FromArgb(39, 174, 96);
-            btnOrders.Location = new Point(40, 240);
-            btnOrders.Name = "btnOrders";
-            btnOrders.Size = new Size(240, 100);
-            btnOrders.TabIndex = 3;
-            btnOrders.Text = "My Orders";
-            btnOrders.UseVisualStyleBackColor = false;
-            btnOrders.Click += btnOrders_Click;
-            // 
-            // btnLogout
-            // 
-            btnLogout.BackColor = Color.White;
-            btnLogout.Cursor = Cursors.Hand;
-            btnLogout.FlatAppearance.BorderColor = Color.FromArgb(231, 76, 60);
-            btnLogout.FlatAppearance.BorderSize = 2;
-            btnLogout.FlatStyle = FlatStyle.Flat;
-            btnLogout.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnLogout.ForeColor = Color.FromArgb(231, 76, 60);
-            btnLogout.Location = new Point(550, 240);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(240, 100);
-            btnLogout.TabIndex = 4;
-            btnLogout.Text = "Logout";
-            btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click;
-            // 
-            // CustomerMainForm
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(245, 247, 250);
-            ClientSize = new Size(1052, 453);
-            Controls.Add(pnlHeader);
-            Controls.Add(btnBrowse);
-            Controls.Add(btnCart);
-            Controls.Add(btnOrders);
-            Controls.Add(btnLogout);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            Name = "CustomerMainForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Customer Dashboard";
-            Load += CustomerMainForm_Load;
-            pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
-            ResumeLayout(false);
+            this.pnlTopBar = new System.Windows.Forms.Panel();
+            this.pnlTopAccent = new System.Windows.Forms.Panel();
+            this.pnlContent = new System.Windows.Forms.Panel();
+            this.lblTitleIcon = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblSubtitle = new System.Windows.Forms.Label();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.btnCart = new System.Windows.Forms.Button();
+            this.btnOrders = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.pnlTopBar.SuspendLayout();
+            this.pnlContent.SuspendLayout();
+            this.SuspendLayout();
+
+            // ??????????????????????????????????????????????????????????????????
+            //  PALETTE
+            // ??????????????????????????????????????????????????????????????????
+            var clrDark = System.Drawing.Color.FromArgb(15, 17, 26);
+            var clrAccent = System.Drawing.Color.FromArgb(99, 102, 241); // Indigo
+            var clrContent = System.Drawing.Color.FromArgb(243, 245, 250);
+            var clrWhite = System.Drawing.Color.White;
+            var clrTextPrimary = System.Drawing.Color.FromArgb(17, 24, 39);
+            var clrTextMuted = System.Drawing.Color.FromArgb(107, 114, 128);
+
+            // ??????????????????????????????????????????????????????????????????
+            //  TOP BAR
+            // ??????????????????????????????????????????????????????????????????
+            this.pnlTopBar.BackColor = clrDark;
+            this.pnlTopBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTopBar.Height = 72;
+            this.pnlTopBar.Name = "pnlTopBar";
+
+            this.pnlTopAccent.BackColor = clrAccent;
+            this.pnlTopAccent.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlTopAccent.Height = 3;
+            this.pnlTopAccent.Name = "pnlTopAccent";
+            this.pnlTopBar.Controls.Add(this.pnlTopAccent);
+
+            this.lblTitleIcon.AutoSize = true;
+            this.lblTitleIcon.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitleIcon.Font = new System.Drawing.Font("Segoe UI Symbol", 20F);
+            this.lblTitleIcon.ForeColor = clrAccent;
+            this.lblTitleIcon.Location = new System.Drawing.Point(24, 16);
+            this.lblTitleIcon.Name = "lblTitleIcon";
+            this.lblTitleIcon.Text = "??";
+
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = clrWhite;
+            this.lblTitle.Location = new System.Drawing.Point(66, 16);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Text = "Customer Dashboard";
+
+            this.lblSubtitle.AutoSize = true;
+            this.lblSubtitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(156, 163, 175);
+            this.lblSubtitle.Location = new System.Drawing.Point(68, 42);
+            this.lblSubtitle.Name = "lblSubtitle";
+            this.lblSubtitle.Text = "Welcome! What would you like to do today?";
+
+            this.pnlTopBar.Controls.Add(this.lblTitleIcon);
+            this.pnlTopBar.Controls.Add(this.lblTitle);
+            this.pnlTopBar.Controls.Add(this.lblSubtitle);
+
+            // ??????????????????????????????????????????????????????????????????
+            //  CONTENT PANEL
+            // ??????????????????????????????????????????????????????????????????
+            this.pnlContent.BackColor = clrContent;
+            this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlContent.Name = "pnlContent";
+
+            // Helper to create modern buttons
+            System.Windows.Forms.Button MakeBtn(string text, System.Drawing.Color color, int x, int y)
+            {
+                var btn = new System.Windows.Forms.Button();
+                btn.Text = text;
+                btn.Location = new System.Drawing.Point(x, y);
+                btn.Size = new System.Drawing.Size(240, 120);
+                btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                btn.BackColor = clrWhite;
+                btn.ForeColor = color;
+                btn.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
+                btn.Cursor = System.Windows.Forms.Cursors.Hand;
+                btn.FlatAppearance.BorderColor = color;
+                btn.FlatAppearance.BorderSize = 2;
+                btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(249, 250, 251);
+                return btn;
+            }
+
+            this.btnBrowse = MakeBtn("?? Browse Products", System.Drawing.Color.FromArgb(52, 152, 219), 60, 60);
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+
+            this.btnCart = MakeBtn("?? View Cart", System.Drawing.Color.FromArgb(243, 156, 18), 340, 60);
+            this.btnCart.Click += new System.EventHandler(this.btnCart_Click);
+
+            this.btnOrders = MakeBtn("?? My Orders", System.Drawing.Color.FromArgb(39, 174, 96), 60, 220);
+            this.btnOrders.Click += new System.EventHandler(this.btnOrders_Click);
+
+            this.btnLogout = MakeBtn("? Logout", System.Drawing.Color.FromArgb(231, 76, 60), 340, 220);
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+
+            this.pnlContent.Controls.Add(this.btnBrowse);
+            this.pnlContent.Controls.Add(this.btnCart);
+            this.pnlContent.Controls.Add(this.btnOrders);
+            this.pnlContent.Controls.Add(this.btnLogout);
+
+            // ??????????????????????????????????????????????????????????????????
+            //  FORM
+            // ??????????????????????????????????????????????????????????????????
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(640, 480);
+            this.Controls.Add(this.pnlContent);
+            this.Controls.Add(this.pnlTopBar);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.Name = "CustomerMainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "NexShop — Customer Dashboard";
+            this.Load += new System.EventHandler(this.CustomerMainForm_Load);
+            this.pnlTopBar.ResumeLayout(false);
+            this.pnlTopBar.PerformLayout();
+            this.pnlContent.ResumeLayout(false);
+            this.ResumeLayout(false);
         }
     }
 }

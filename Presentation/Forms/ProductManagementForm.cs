@@ -8,6 +8,7 @@ using Application.Services;
 using Domain.Entities;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Presentation.Utilities;
 
 namespace Presentation.Forms
 {
@@ -20,191 +21,204 @@ namespace Presentation.Forms
         public ProductManagementForm(ApplicationDbContext context)
         {
             InitializeComponent();
-            SetupGrid();
+            
             _context = context;
             IProductRepository productRepository = new ProductRepository(_context);
             _categoryRepository = new CategoryRepository(_context);
             _productService = new ProductAdminService(productRepository, _categoryRepository);
 
-            // Replace inline inputs with a single "Add Product" button
-            pnlInputs.Controls.Clear();
+            // Apply Modern Design
+            ModernDesignSystem.Forms.ApplyModernFormStyle(this, "Product Management", 1300, 750);
+            SetupGrid();
+            AddActionButtons();
+            LoadProducts();
+            
+            // Handle resize
+            this.Resize += ProductManagementForm_Resize;
+        }
+
+        private void AddActionButtons()
+        {
+            var pnlContent = this.Controls.Find("pnlContent", true).FirstOrDefault() as Panel;
+            if (pnlContent == null) return;
+
             var btnAddNew = new Button
             {
-                Text = "+ Add New Product",
-                Location = new Point(12, 12),
-                Size = new Size(200, 45),
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(39, 174, 96),
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                Cursor = Cursors.Hand,
+                Location = new Point(ModernDesignSystem.Spacing.Large, ModernDesignSystem.Spacing.Large),
+                Name = "btnAddNew"
             };
-            btnAddNew.FlatAppearance.BorderSize = 0;
+            ModernDesignSystem.Buttons.ApplySuccessStyle(btnAddNew, "+ Add New Product", 200, 46);
             btnAddNew.Click += (s, e) =>
             {
                 using var form = new AddEditProductForm(_productService, _categoryRepository);
                 if (form.ShowDialog() == DialogResult.OK)
                     LoadProducts();
             };
-            pnlInputs.Size = new Size(pnlInputs.Width, 70);
-            pnlInputs.Controls.Add(btnAddNew);
-
-            // Adjust grid position and anchor to fill space
-            dgvProducts.Location = new Point(25, 160);
-            dgvProducts.Size = new Size(1050, 520);
-            dgvProducts.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvProducts.ScrollBars = ScrollBars.Both;
-
-            LoadProducts();
+            
+            pnlContent.Controls.Add(btnAddNew);
         }
 
         private void SetupGrid()
         {
-            dgvProducts.AutoGenerateColumns = false;
-            dgvProducts.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-            {
-                BackColor = Color.FromArgb(45, 62, 80),
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
-                Alignment = DataGridViewContentAlignment.MiddleCenter,
-                Padding = new Padding(0),
-            };
-            dgvProducts.DefaultCellStyle = new DataGridViewCellStyle
-            {
-                Font = new Font("Segoe UI", 9.75F),
-                Padding = new Padding(4),
-                Alignment = DataGridViewContentAlignment.MiddleCenter,
-                SelectionBackColor = Color.FromArgb(214, 234, 248),
-                SelectionForeColor = Color.FromArgb(45, 62, 80),
-            };
-            dgvProducts.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
-            {
-                BackColor = Color.FromArgb(245, 247, 250),
-                SelectionBackColor = Color.FromArgb(214, 234, 248),
-                SelectionForeColor = Color.FromArgb(45, 62, 80),
-            };
-
+            ModernDesignSystem.Grids.ApplyModernStyle(dgvProducts);
+            
+            dgvProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvProducts.Columns.Clear();
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "ID",
+                HeaderText = "ID",
+                Width = 60,
+                MinimumWidth = 50,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "ID",
-                    HeaderText = "ID",
-                    Width = 50,
+                    Font = ModernDesignSystem.Typography.GridHeader,
+                    ForeColor = ModernDesignSystem.Colors.Primary
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewImageColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewImageColumn
+            {
+                Name = "Image",
+                HeaderText = "Image",
+                ImageLayout = DataGridViewImageCellLayout.Zoom,
+                Width = 80,
+                MinimumWidth = 60
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Name",
+                HeaderText = "Product Name",
+                Width = 200,
+                MinimumWidth = 150,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Image",
-                    HeaderText = "Image",
-                    ImageLayout = DataGridViewImageCellLayout.Zoom,
-                    Width = 70,
+                    Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
+                    ForeColor = ModernDesignSystem.Colors.TextPrimary
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Price",
+                HeaderText = "Price",
+                Width = 100,
+                MinimumWidth = 80,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Name",
-                    HeaderText = "Name",
-                    Width = 170,
+                    Format = "C2",
+                    ForeColor = ModernDesignSystem.Colors.Success
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Category",
+                HeaderText = "Category",
+                Width = 130,
+                MinimumWidth = 100
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Stock",
+                HeaderText = "Stock",
+                Width = 80,
+                MinimumWidth = 60,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Price",
-                    HeaderText = "Price",
-                    Width = 100,
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Status",
+                HeaderText = "Status",
+                Width = 100,
+                MinimumWidth = 80,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Category",
-                    HeaderText = "Category",
-                    Width = 130,
+                    Font = ModernDesignSystem.Typography.GridHeader,
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewButtonColumn
+            {
+                Name = "ToggleStatus",
+                HeaderText = "",
+                Text = "Toggle",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                MinimumWidth = 70,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Stock",
-                    HeaderText = "Stock",
-                    Width = 80,
+                    BackColor = ModernDesignSystem.Colors.Warning,
+                    ForeColor = ModernDesignSystem.Colors.TextLight,
+                    Font = ModernDesignSystem.Typography.Button,
+                    SelectionBackColor = Color.FromArgb(234, 88, 12),
+                    SelectionForeColor = ModernDesignSystem.Colors.TextLight
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewTextBoxColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewButtonColumn
+            {
+                Name = "Edit",
+                HeaderText = "",
+                Text = "?? Edit",
+                UseColumnTextForButtonValue = true,
+                Width = 100,
+                MinimumWidth = 80,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "Status",
-                    HeaderText = "Status",
-                    Width = 80,
+                    BackColor = ModernDesignSystem.Colors.Primary,
+                    ForeColor = ModernDesignSystem.Colors.TextLight,
+                    Font = ModernDesignSystem.Typography.Button,
+                    SelectionBackColor = ModernDesignSystem.Colors.PrimaryDark,
+                    SelectionForeColor = ModernDesignSystem.Colors.TextLight
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewButtonColumn
+            });
+
+            dgvProducts.Columns.Add(new DataGridViewButtonColumn
+            {
+                Name = "Delete",
+                HeaderText = "",
+                Text = "??? Delete",
+                UseColumnTextForButtonValue = true,
+                Width = 110,
+                MinimumWidth = 90,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = new DataGridViewCellStyle
                 {
-                    Name = "ToggleStatus",
-                    HeaderText = "",
-                    Text = "Toggle",
-                    UseColumnTextForButtonValue = true,
-                    Width = 90,
-                    FlatStyle = FlatStyle.Flat,
-                    DefaultCellStyle = new DataGridViewCellStyle
-                    {
-                        BackColor = Color.FromArgb(243, 156, 18),
-                        ForeColor = Color.White,
-                        Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                        SelectionBackColor = Color.FromArgb(211, 133, 9),
-                        SelectionForeColor = Color.White,
-                    },
+                    BackColor = ModernDesignSystem.Colors.Danger,
+                    ForeColor = ModernDesignSystem.Colors.TextLight,
+                    Font = ModernDesignSystem.Typography.Button,
+                    SelectionBackColor = Color.FromArgb(220, 38, 38),
+                    SelectionForeColor = ModernDesignSystem.Colors.TextLight
                 }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewButtonColumn
-                {
-                    Name = "Edit",
-                    HeaderText = "",
-                    Text = "Edit",
-                    UseColumnTextForButtonValue = true,
-                    Width = 100,
-                    FlatStyle = FlatStyle.Flat,
-                    DefaultCellStyle = new DataGridViewCellStyle
-                    {
-                        BackColor = Color.FromArgb(52, 152, 219),
-                        ForeColor = Color.White,
-                        Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                        SelectionBackColor = Color.FromArgb(41, 128, 185),
-                        SelectionForeColor = Color.White,
-                    },
-                }
-            );
-            dgvProducts.Columns.Add(
-                new DataGridViewButtonColumn
-                {
-                    Name = "Delete",
-                    HeaderText = "",
-                    Text = "Delete",
-                    UseColumnTextForButtonValue = true,
-                    Width = 110,
-                    FlatStyle = FlatStyle.Flat,
-                    DefaultCellStyle = new DataGridViewCellStyle
-                    {
-                        BackColor = Color.FromArgb(231, 76, 60),
-                        ForeColor = Color.White,
-                        Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                        SelectionBackColor = Color.FromArgb(192, 57, 43),
-                        SelectionForeColor = Color.White,
-                    },
-                }
-            );
+            });
+        }
+
+        private void ProductManagementForm_Resize(object sender, EventArgs e)
+        {
+            // Adjust grid to fill available space
+            if (dgvProducts != null && dgvProducts.Parent != null)
+            {
+                dgvProducts.Width = dgvProducts.Parent.Width - 48;
+                dgvProducts.Height = dgvProducts.Parent.Height - dgvProducts.Top - 24;
+            }
         }
 
         private void LoadProducts()
         {
             dgvProducts.Rows.Clear();
             var products = _productService.GetAll().ToList();
+            
             foreach (var product in products)
             {
                 int rowIdx = dgvProducts.Rows.Add(
@@ -214,21 +228,29 @@ namespace Presentation.Forms
                     product.Price,
                     product.CategoryName ?? "N/A",
                     product.UnitsInStock,
-                    product.IsActive ? "Active" : "Inactive",
+                    product.IsActive ? "? Active" : "? Inactive",
                     product.IsActive ? "Deactivate" : "Activate",
                     "Edit",
                     "Delete"
                 );
+
                 var row = dgvProducts.Rows[rowIdx];
+                
                 row.Cells["Status"].Style.ForeColor = product.IsActive
-                    ? Color.FromArgb(39, 174, 96)
-                    : Color.FromArgb(231, 76, 60);
-                row.Cells["Status"].Style.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+                    ? ModernDesignSystem.Colors.Success
+                    : ModernDesignSystem.Colors.Danger;
+                row.Cells["Status"].Style.Font = ModernDesignSystem.Typography.GridHeader;
 
                 if (!product.IsActive)
                 {
-                    row.DefaultCellStyle.BackColor = Color.FromArgb(240, 230, 230);
-                    row.DefaultCellStyle.ForeColor = Color.FromArgb(160, 160, 160);
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(250, 245, 245);
+                    row.DefaultCellStyle.ForeColor = ModernDesignSystem.Colors.TextSecondary;
+                }
+
+                if (product.UnitsInStock < 10)
+                {
+                    row.Cells["Stock"].Style.ForeColor = ModernDesignSystem.Colors.Danger;
+                    row.Cells["Stock"].Style.Font = ModernDesignSystem.Typography.GridHeader;
                 }
             }
         }
@@ -255,23 +277,23 @@ namespace Presentation.Forms
         {
             var bmp = new Bitmap(60, 50);
             using var g = Graphics.FromImage(bmp);
-            g.Clear(Color.WhiteSmoke);
-            using var pen = new Pen(Color.LightGray, 1);
-            g.DrawRectangle(pen, 0, 0, 59, 49);
-            using var font = new Font("Arial", 6f);
+            g.Clear(ModernDesignSystem.Colors.HoverBackground);
+            using var pen = new Pen(ModernDesignSystem.Colors.GridBorder, 2);
+            g.DrawRectangle(pen, 1, 1, 58, 48);
+            using var font = new Font("Segoe UI", 7f);
             var sf = new StringFormat
             {
                 Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
             };
-            g.DrawString("No Image", font, Brushes.Gray, new RectangleF(0, 0, 60, 50), sf);
+            g.DrawString("No Image", font, new SolidBrush(ModernDesignSystem.Colors.TextSecondary), 
+                new RectangleF(0, 0, 60, 50), sf);
             return bmp;
         }
 
         private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
 
             int productId = Convert.ToInt32(dgvProducts.Rows[e.RowIndex].Cells["ID"].Value);
 
@@ -286,17 +308,12 @@ namespace Presentation.Forms
             {
                 var name = dgvProducts.Rows[e.RowIndex].Cells["Name"].Value?.ToString() ?? "";
                 var statusText = dgvProducts.Rows[e.RowIndex].Cells["Status"].Value?.ToString();
-                bool isActive = statusText == "Active";
+                bool isActive = statusText?.Contains("Active") == true;
                 var action = isActive ? "deactivate" : "activate";
 
-                var result = MessageBox.Show(
+                if (ModernDesignSystem.Messages.ShowConfirmation(
                     $"Are you sure you want to {action} '{name}'?",
-                    "Confirm Status Change",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-                if (result != DialogResult.Yes)
+                    "Confirm Status Change") != DialogResult.Yes)
                     return;
 
                 try
@@ -306,56 +323,32 @@ namespace Presentation.Forms
                     else
                         _productService.Activate(productId);
 
-                    MessageBox.Show(
-                        $"Product {action}d successfully!",
-                        "Success",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
+                    ModernDesignSystem.Messages.ShowSuccess($"Product {action}d successfully!");
                     LoadProducts();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(
-                        $"Error: {ex.Message}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    ModernDesignSystem.Messages.ShowError($"Error: {ex.Message}");
                 }
             }
             else if (e.ColumnIndex == dgvProducts.Columns["Delete"].Index)
             {
                 var name = dgvProducts.Rows[e.RowIndex].Cells["Name"].Value?.ToString() ?? "";
-                var result = MessageBox.Show(
-                    $"Are you sure you want to delete '{name}'?",
-                    "Confirm Delete",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-                if (result != DialogResult.Yes)
+                
+                if (ModernDesignSystem.Messages.ShowConfirmation(
+                    $"Are you sure you want to delete '{name}'?\n\nThis action cannot be undone.",
+                    "Confirm Delete") != DialogResult.Yes)
                     return;
 
                 try
                 {
                     _productService.Delete(productId);
-                    MessageBox.Show(
-                        "Product deleted successfully!",
-                        "Success",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
+                    ModernDesignSystem.Messages.ShowSuccess("Product deleted successfully!");
                     LoadProducts();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(
-                        $"Error: {ex.Message}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    ModernDesignSystem.Messages.ShowError($"Error: {ex.Message}");
                 }
             }
         }
