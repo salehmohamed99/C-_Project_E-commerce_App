@@ -18,6 +18,7 @@ namespace Application.Services
     public class OrderService : IOrderService
     {
         public IOrderRepository OrderRepository { get; set; }
+        public IProductRepository productRepository { get; set; }
         public IGenericRepository<CartItem, int> CartItemRepository { get; set; }
         public OrderService(IOrderRepository orderRepo, IGenericRepository<CartItem, int> cartItemRepo)
         {
@@ -35,6 +36,13 @@ namespace Application.Services
             if (!cartItems.Any()) 
                 throw new Exception("Cart is empty.");
 
+            foreach (var item in cartItems)
+            {
+                if (item.Product.UnitsInStock < item.Quantity)
+                    throw new Exception($"Product '{item.Product.Name}' is out of stock.");
+            }
+            
+
             var order = new Order
             {
                 UserId = userId,
@@ -51,6 +59,14 @@ namespace Application.Services
             };
 
             OrderRepository.Add(order);
+
+            foreach (var item in cartItems)
+            {
+                var product = item.Product;
+                product.UnitsInStock -= item.Quantity;
+                productRepository.Update(product);
+            }
+            await Task.Run(() => productRepository.SaveChanges());
 
             foreach (var item in cartItems)
             {
