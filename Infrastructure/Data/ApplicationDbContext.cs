@@ -16,7 +16,7 @@ namespace Infrastructure.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                "Data Source =.; Initial Catalog = C#Project; Integrated Security = True; Encrypt = False;"
+                "Data Source =DESKTOP-RSTRDRJ\\NEWSQL; Initial Catalog = C#Project; Integrated Security = True; Encrypt = False;"
             );
                 
         }

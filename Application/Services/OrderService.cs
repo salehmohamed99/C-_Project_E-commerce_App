@@ -25,44 +25,118 @@ namespace Application.Services
             CartItemRepository = cartItemRepo;
         }
 
-       public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid)
+       public async Task<OrderDTO> PlaceOrderFromCartAsync(int cartid, int userId, string shippingAddress)
         {
-            var CartItems = CartItemRepository.GetAllEntitys().Where(c => c.CartId == cartid).ToList();
-            if (!CartItems.Any()) 
+            var cartItems = CartItemRepository.GetAllEntitys()
+                .Include(ci => ci.Product)
+                .Where(c => c.CartId == cartid)
+                .ToList();
+            
+            if (!cartItems.Any()) 
                 throw new Exception("Cart is empty.");
 
             var order = new Order
             {
-                UserId = CartItems.FirstOrDefault().Cart.UserID,
+                UserId = userId,
                 CreatedAt = DateTime.Now,
                 Status = OrderStatus.Processing,
-                TotalAmount = CartItems.Sum(ci => ci.Product.Price * ci.Quantity), // optional if Product has Price
-                OrderProducts = CartItems.Select(ci => new OrderProduct
+                TotalAmount = cartItems.Sum(ci => ci.Product.Price * ci.Quantity),
+                ShippingAddress = shippingAddress,
+                OrderProducts = cartItems.Select(ci => new OrderProduct
                 {
                     ProductId = ci.ProductId,
-                    Quantity = ci.Quantity
+                    Quantity = ci.Quantity,
+                    UnitPrice = ci.Product.Price
                 }).ToList()
             };
 
-
             OrderRepository.Add(order);
-            await Task.Run(() => OrderRepository.SaveChanges());
 
-            foreach (var item in CartItems)
+            foreach (var item in cartItems)
             {
                 CartItemRepository.Delete(item);
             }
-            await Task.Run(() => CartItemRepository.SaveChanges());
+            await Task.Run(() => OrderRepository.SaveChanges());
 
-            return order.Adapt<OrderDTO>();
+            var orderDto = new OrderDTO
+            {
+                ID = order.ID,
+                Status = order.Status,
+                ShippingAddress = order.ShippingAddress,
+                TotalAmount = order.TotalAmount,
+                UserId = order.UserId,
+                CreatedAt = order.CreatedAt,
+                OrderProducts = order.OrderProducts.Select(op => new Application.DTOs.OrderProductDTOs.OrderProductDTO
+                {
+                    Id = op.ID,
+                    OrderId = op.OrderId,
+                    ProductId = op.ProductId,
+                    Quantity = op.Quantity,
+                    TotalPrice = op.UnitPrice * op.Quantity
+                }).ToList()
+            };
 
+            return orderDto;
         }
 
-        //Admin: View All Customer's Orders
+        //Customer: View Their Orders
         public async Task<IEnumerable<OrderDTO>> GetUserOrdersAsync(int userId)
         {
-            var orders =await Task.Run(() => OrderRepository.GetOrdersByUser(userId).ToList());
-            return orders.Adapt<List<OrderDTO>>();
+            var orders = await Task.Run(() => 
+                OrderRepository.GetOrdersByUser(userId)
+                    .ToList()
+            );
+
+            return orders.Select(o => new OrderDTO
+            {
+                ID = o.ID,
+                Status = o.Status,
+                ShippingAddress = o.ShippingAddress,
+                TotalAmount = o.TotalAmount,
+                UserId = o.UserId,
+                UserName = o.User?.Name,
+                CreatedAt = o.CreatedAt,
+                OrderProducts = o.OrderProducts?.Select(op => new Application.DTOs.OrderProductDTOs.OrderProductDTO
+                {
+                    Id = op.ID,
+                    OrderId = op.OrderId,
+                    ProductId = op.ProductId,
+                    ProductName = op.product?.Name ?? "N/A",
+                    Quantity = op.Quantity,
+                    UnitPrice = op.UnitPrice,
+                    TotalPrice = op.UnitPrice * op.Quantity
+                }).ToList() ?? new List<Application.DTOs.OrderProductDTOs.OrderProductDTO>()
+            }).ToList();
+        }
+
+        //Admin: View All Orders
+        public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsync()
+        {
+            var orders = await Task.Run(() => 
+                OrderRepository.GetAllOrders()
+                    .ToList()
+            );
+
+            return orders.Select(o => new OrderDTO
+            {
+                ID = o.ID,
+                Status = o.Status,
+                ShippingAddress = o.ShippingAddress,
+                TotalAmount = o.TotalAmount,
+                UserId = o.UserId,
+                UserName = o.User?.Name,
+                CreatedAt = o.CreatedAt,
+                OrderProducts = o.OrderProducts?.Select(op => new Application.DTOs.OrderProductDTOs.OrderProductDTO
+                {
+                    Id = op.ID,
+                    OrderId = op.OrderId,
+                    ProductId = op.ProductId,
+                    ProductName = op.product?.Name ?? "N/A",
+                    Quantity = op.Quantity,
+                    UnitPrice = op.UnitPrice,
+                    TotalPrice = op.UnitPrice * op.Quantity
+                }).ToList() ?? new List<Application.DTOs.OrderProductDTOs.OrderProductDTO>()
+            }).ToList();
         }
 
         //Admin: Update Order Status

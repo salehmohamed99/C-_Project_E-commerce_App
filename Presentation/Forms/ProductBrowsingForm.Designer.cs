@@ -1,14 +1,16 @@
-namespace Presentation.Forms
+﻿namespace Presentation.Forms
 {
     partial class ProductBrowsingForm
     {
         private System.ComponentModel.IContainer components = null;
 
+        private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView dgvProducts;
+        private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnClose;
 
         protected override void Dispose(bool disposing)
@@ -20,73 +22,154 @@ namespace Presentation.Forms
 
         private void InitializeComponent()
         {
-            this.lblTitle   = new System.Windows.Forms.Label();
-            this.lblSearch  = new System.Windows.Forms.Label();
-            this.txtSearch  = new System.Windows.Forms.TextBox();
-            this.btnSearch  = new System.Windows.Forms.Button();
-            this.dgvProducts = new System.Windows.Forms.DataGridView();
-            this.btnClose   = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)this.dgvProducts).BeginInit();
-            this.SuspendLayout();
-
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            pnlHeader = new Panel();
+            lblTitle = new Label();
+            lblSearch = new Label();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
+            dgvProducts = new DataGridView();
+            btnClose = new Button();
+            pnlHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
+            SuspendLayout();
+            // 
+            // pnlHeader
+            // 
+            pnlHeader.BackColor = Color.FromArgb(45, 62, 80);
+            pnlHeader.Controls.Add(lblTitle);
+            pnlHeader.Dock = DockStyle.Top;
+            pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Size = new Size(1060, 60);
+            pnlHeader.TabIndex = 0;
+            // 
             // lblTitle
-            this.lblTitle.Text     = "Browse Products";
-            this.lblTitle.Font     = new System.Drawing.Font("Arial", 14, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(20, 20);
-            this.lblTitle.Size     = new System.Drawing.Size(250, 25);
-
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.BackColor = Color.Transparent;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(25, 12);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(252, 41);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Browse Products";
+            // 
             // lblSearch
-            this.lblSearch.Text     = "Search:";
-            this.lblSearch.Location = new System.Drawing.Point(20, 63);
-            this.lblSearch.Size     = new System.Drawing.Size(55, 20);
-
+            // 
+            lblSearch.AutoSize = true;
+            lblSearch.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSearch.Location = new Point(0, 78);
+            lblSearch.Name = "lblSearch";
+            lblSearch.Size = new Size(68, 23);
+            lblSearch.TabIndex = 1;
+            lblSearch.Text = "Search:";
+            // 
             // txtSearch
-            this.txtSearch.Location = new System.Drawing.Point(80, 60);
-            this.txtSearch.Size     = new System.Drawing.Size(200, 25);
-
+            // 
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.Font = new Font("Segoe UI", 11F);
+            txtSearch.Location = new Point(74, 78);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(300, 32);
+            txtSearch.TabIndex = 2;
+            // 
             // btnSearch
-            this.btnSearch.Text     = "Search";
-            this.btnSearch.Location = new System.Drawing.Point(290, 60);
-            this.btnSearch.Size     = new System.Drawing.Size(80, 28);
-            this.btnSearch.Click   += new System.EventHandler(this.btnSearch_Click);
-
+            // 
+            btnSearch.BackColor = Color.FromArgb(52, 152, 219);
+            btnSearch.Cursor = Cursors.Hand;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSearch.ForeColor = Color.White;
+            btnSearch.Location = new Point(390, 76);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(100, 35);
+            btnSearch.TabIndex = 3;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // dgvProducts
-            this.dgvProducts.Location            = new System.Drawing.Point(20, 105);
-            this.dgvProducts.Size                = new System.Drawing.Size(1000, 450);
-            this.dgvProducts.AutoGenerateColumns = false;
-            this.dgvProducts.RowTemplate.Height  = 60;
-            this.dgvProducts.Columns.Add("ID",      "ID");
-            this.dgvProducts.Columns.Add(new System.Windows.Forms.DataGridViewImageColumn {
-                Name = "Image",
-                HeaderText = "Image",
-                ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom,
-                Width = 70
-            });
-            this.dgvProducts.Columns.Add("Name",    "Product Name");
-            this.dgvProducts.Columns.Add("Price",   "Price");
-            this.dgvProducts.Columns.Add("Stock",   "Stock");
-            this.dgvProducts.Columns.Add("Details", "Details");
-            this.dgvProducts.Columns.Add("AddCart", "Add to Cart");
-
+            // 
+            dgvProducts.AllowUserToAddRows = false;
+            dgvProducts.BackgroundColor = Color.White;
+            dgvProducts.BorderStyle = BorderStyle.None;
+            dgvProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvProducts.ColumnHeadersHeight = 42;
+            dgvProducts.EnableHeadersVisualStyles = false;
+            dgvProducts.GridColor = Color.FromArgb(230, 230, 230);
+            dgvProducts.Location = new Point(25, 125);
+            dgvProducts.MultiSelect = false;
+            dgvProducts.Name = "dgvProducts";
+            dgvProducts.RowHeadersVisible = false;
+            dgvProducts.RowHeadersWidth = 51;
+            dgvProducts.RowTemplate.Height = 60;
+            dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProducts.Size = new Size(1010, 460);
+            dgvProducts.TabIndex = 4;
+            dgvProducts.CellContentClick += dgvProducts_CellContentClick;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh = new Button();
+            btnRefresh.BackColor = Color.FromArgb(52, 152, 219);
+            btnRefresh.Cursor = Cursors.Hand;
+            btnRefresh.FlatAppearance.BorderSize = 0;
+            btnRefresh.FlatStyle = FlatStyle.Flat;
+            btnRefresh.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnRefresh.ForeColor = Color.White;
+            btnRefresh.Location = new Point(25, 600);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(120, 40);
+            btnRefresh.Text = "Refresh";
+            btnRefresh.UseVisualStyleBackColor = false;
+            btnRefresh.Click += btnRefresh_Click;
+            // 
             // btnClose
-            this.btnClose.Text     = "Close";
-            this.btnClose.Location = new System.Drawing.Point(945, 580);
-            this.btnClose.Size     = new System.Drawing.Size(75, 30);
-            this.btnClose.Click   += new System.EventHandler(this.btnClose_Click);
-
+            // 
+            btnClose.BackColor = Color.FromArgb(45, 62, 80);
+            btnClose.Cursor = Cursors.Hand;
+            btnClose.FlatAppearance.BorderSize = 0;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnClose.ForeColor = Color.White;
+            btnClose.Location = new Point(915, 600);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(120, 40);
+            btnClose.TabIndex = 5;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = false;
+            btnClose.Click += btnClose_Click;
+            // 
             // ProductBrowsingForm
-            this.ClientSize = new System.Drawing.Size(1060, 640);
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.lblTitle, this.lblSearch, this.txtSearch,
-                this.btnSearch, this.dgvProducts, this.btnClose
-            });
-            this.Text          = "Browse Products";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ((System.ComponentModel.ISupportInitialize)this.dgvProducts).EndInit();
-            this.ResumeLayout(false);
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(245, 247, 250);
+            ClientSize = new Size(1060, 655);
+            Controls.Add(pnlHeader);
+            Controls.Add(lblSearch);
+            Controls.Add(txtSearch);
+            Controls.Add(btnSearch);
+            Controls.Add(dgvProducts);
+            Controls.Add(btnRefresh);
+            Controls.Add(btnClose);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            Name = "ProductBrowsingForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Browse Products";
+            pnlHeader.ResumeLayout(false);
+            pnlHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }
+
 

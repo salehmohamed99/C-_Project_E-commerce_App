@@ -1,5 +1,7 @@
 using System.Windows.Forms;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Services;
 using Domain.Entities;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -9,22 +11,19 @@ namespace Presentation.Forms
     public partial class LoginForm : Form
     {
         private ApplicationDbContext _context;
-        private IGenericRepository<User, int> _userRepository;
+        private IUserService _userService;
 
         public LoginForm()
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
-            _userRepository = new GenericRepository<User, int>(_context);
+            IGenericRepository<User, int> userRepository = new GenericRepository<User, int>(_context);
+            _userService = new UserService(userRepository);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            var user = _userRepository
-                .GetAllEntitys()
-                .FirstOrDefault(u => u.UserName == txtUsername.Text
-                                  && u.Password == txtPassword.Text
-                                  && !u.IsDeleted);
+            var user = _userService.Authenticate(txtUsername.Text, txtPassword.Text);
 
             if (user == null)
             {
@@ -32,10 +31,11 @@ namespace Presentation.Forms
                 return;
             }
 
-            if (user.Role == Role.Admin)
+            // Need to map from UserDto back to Role for checking
+            if (user.Role == Role.Admin.ToString())
                 new AdminMainForm(_context).Show();
             else
-                new CustomerMainForm(_context, user.ID).Show();
+                new CustomerMainForm(_context, user.Id).Show();
 
             this.Hide();
         }

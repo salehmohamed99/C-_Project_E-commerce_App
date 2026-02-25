@@ -8,6 +8,7 @@ namespace Application.Interfaces.Repositories
     public interface IOrderRepository :IGenericRepository<Order,int>
     {
         IQueryable<Order> GetOrdersWithProducts();
+        IQueryable<Order> GetAllOrders();
         IQueryable<Order> GetOrdersByUser(int userId);
         Order GetOrderWithDetails(int id);
         Task AddAsync(Order order);

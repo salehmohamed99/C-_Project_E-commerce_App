@@ -20,6 +20,9 @@
     <Compile Update="Forms\MyOrdersForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\OrderDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\OrderPlacementForm.cs">
       <SubType>Form</SubType>
     </Compile>

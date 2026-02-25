@@ -92,7 +92,9 @@ namespace Application.Services
 
         public UserDto Authenticate(string email, string password)
         {
-            var user = _userRepository.GetAllEntitys().FirstOrDefault(u => u.Email == email);
+            var user = _userRepository
+                .GetAllEntitys()
+                .FirstOrDefault(u => u.Email == email || u.UserName == email);
             if (user == null)
                 return null;
 

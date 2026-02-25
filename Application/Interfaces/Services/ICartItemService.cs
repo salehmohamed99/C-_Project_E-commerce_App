@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Application.DTOs;
 
-namespace Application.Interfaces.Repositories
+namespace Application.Interfaces.Services
 {
     public interface ICartItemService
     {

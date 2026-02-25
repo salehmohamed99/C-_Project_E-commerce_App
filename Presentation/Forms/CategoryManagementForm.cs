@@ -1,5 +1,8 @@
 using System.Windows.Forms;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Services;
+using Application.DTOs.CategoryDTOs;
 using Domain.Entities;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -9,14 +12,15 @@ namespace Presentation.Forms
     public partial class CategoryManagementForm : Form
     {
         private ApplicationDbContext _context;
-        private IGenericRepository<Category, int> _categoryRepository;
+        private ICategoryAdminService _categoryService;
         private int _editingCategoryId = 0;
 
         public CategoryManagementForm(ApplicationDbContext context)
         {
             InitializeComponent();
             _context = context;
-            _categoryRepository = new GenericRepository<Category, int>(_context);
+            ICategoryRepository categoryRepository = new Infrastructure.Repositories.CategoryRepository(_context);
+            _categoryService = new CategoryAdminService(categoryRepository);
             SetupColumns();
             LoadCategories();
         }
@@ -39,9 +43,9 @@ namespace Presentation.Forms
         private void LoadCategories()
         {
             dgvCategories.Rows.Clear();
-            var categories = _categoryRepository.GetAllEntitys().Where(c => !c.IsDeleted).ToList();
+            var categories = _categoryService.GetAll().ToList();
             foreach (var category in categories)
-                dgvCategories.Rows.Add(category.ID, category.Name);
+                dgvCategories.Rows.Add(category.Id, category.Name);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -53,32 +57,33 @@ namespace Presentation.Forms
                 return;
             }
 
-            if (_editingCategoryId > 0)
+            try
             {
-                // Update mode
-                var category = _categoryRepository.GetAllEntitys().FirstOrDefault(c => c.ID == _editingCategoryId);
-                if (category != null)
+                if (_editingCategoryId > 0)
                 {
-                    category.Name = txtName.Text;
-                    _categoryRepository.Update(category);
-                    _categoryRepository.SaveChanges();
+                    var dto = new UpdateCategoryDto { Name = txtName.Text };
+                    _categoryService.Update(_editingCategoryId, dto);
                     MessageBox.Show("Category updated successfully!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _editingCategoryId = 0;
+                    btnAdd.Text = "Add Category";
                 }
-                _editingCategoryId = 0;
-                btnAdd.Text = "Add Category";
-            }
-            else
-            {
-                // Add mode
-                _categoryRepository.Add(new Category { Name = txtName.Text });
-                _categoryRepository.SaveChanges();
-                MessageBox.Show("Category added successfully!", "Success",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+                else
+                {
+                    var dto = new CreateCategoryDto { Name = txtName.Text };
+                    _categoryService.Create(dto);
+                    MessageBox.Show("Category added successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
-            txtName.Clear();
-            LoadCategories();
+                txtName.Clear();
+                LoadCategories();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dgvCategories_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -90,7 +95,6 @@ namespace Presentation.Forms
 
             if (e.ColumnIndex == dgvCategories.Columns["Edit"].Index)
             {
-                // Edit mode - populate txtName
                 _editingCategoryId = categoryId;
                 txtName.Text       = categoryName;
                 btnAdd.Text        = "Update Category";
@@ -104,14 +108,18 @@ namespace Presentation.Forms
 
                 if (result != DialogResult.Yes) return;
 
-                var category = _categoryRepository.GetAllEntitys().FirstOrDefault(c => c.ID == categoryId);
-                if (category == null) return;
-
-                _categoryRepository.Delete(category);
-                _categoryRepository.SaveChanges();
-                MessageBox.Show("Category deleted successfully!", "Success",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadCategories();
+                try
+                {
+                    _categoryService.Delete(categoryId);
+                    MessageBox.Show("Category deleted successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadCategories();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

@@ -5,6 +5,7 @@ using Domain.Entities;
 using Mapster;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Application.Services
@@ -17,6 +18,20 @@ namespace Application.Services
         {
             _categoryRepository = categoryRepository;
         }
+
+        public IQueryable<CategoryDto> GetAll()
+        {
+            return _categoryRepository.GetAllEntitys()
+                .Where(c => !c.IsDeleted)
+                .Select(c => new CategoryDto
+                {
+                    Id = c.ID,
+                    Name = c.Name,
+                    ProductCount = c.products != null ? c.products.Count : 0,
+                    Created_At = c.CreatedAt
+                });
+        }
+
         public CategoryDto Create(CreateCategoryDto dto)
         {
             var categoryName = _categoryRepository.GetByName(dto.Name);
