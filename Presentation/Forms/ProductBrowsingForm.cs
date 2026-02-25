@@ -24,17 +24,25 @@ namespace Presentation.Forms
             SetupGrid();
             _context = context;
             _userId = userId;
-            IGenericRepository<Product, int> productRepository = new GenericRepository<
-                Product,
-                int
-            >(_context);
+            //IGenericRepository<Product, int> productRepository = new GenericRepository<
+            //    Product,
+            //    int
+            //>(_context);
             IGenericRepository<CartItem, int> cartItemRepository = new GenericRepository<
                 CartItem,
                 int
             >(_context);
-            IGenericRepository<Cart, int> cartRepository = new GenericRepository<Cart, int>(_context);
-            _productService = new ProductCustomerService(productRepository);
-            _cartItemService = new CartItemService(cartItemRepository, productRepository, cartRepository);
+            ICategoryRepository categoryRepository = new CategoryRepository(_context);
+            IProductRepository productRepository = new ProductRepository(_context);
+            IGenericRepository<Cart, int> cartRepository = new GenericRepository<Cart, int>(
+                _context
+            );
+            _productService = new ProductCustomerService(productRepository, categoryRepository);
+            _cartItemService = new CartItemService(
+                cartItemRepository,
+                productRepository,
+                cartRepository
+            );
             LoadProducts();
         }
 
@@ -149,10 +157,10 @@ namespace Presentation.Forms
         private void LoadProducts()
         {
             dgvProducts.Rows.Clear();
-            var products = _productService.GetAvailableProducts().ToList();
+            var products = _productService.GetAll().ToList();
             foreach (var product in products)
                 dgvProducts.Rows.Add(
-                    product.Id,
+                    product.ID,
                     LoadProductImage(product.Image),
                     product.Name,
                     product.Price,
@@ -201,10 +209,10 @@ namespace Presentation.Forms
         {
             dgvProducts.Rows.Clear();
             var term = txtSearch.Text;
-            var products = _productService.SearchProducts(term).ToList();
+            var products = _productService.SearchByName(term).ToList();
             foreach (var product in products)
                 dgvProducts.Rows.Add(
-                    product.Id,
+                    product.ID,
                     LoadProductImage(product.Image),
                     product.Name,
                     product.Price,

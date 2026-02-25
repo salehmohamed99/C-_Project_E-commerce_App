@@ -22,11 +22,10 @@
 //    }
 //}
 
-
-using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Models;
 
 namespace Domain.Entities
 {
@@ -36,19 +35,18 @@ namespace Domain.Entities
 
         public List<Product> products { get; set; }
 
-        public bool IsActive { get; private set; } = true;
-
+        //public bool IsActive { get; private set; } = true;
 
         public void Deactivate()
         {
-
-            IsActive = false;
+            IsDeleted = true;
         }
 
         public void Activate()
         {
-            IsActive = true;
+            IsDeleted = false;
         }
+
         public void Rename(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))

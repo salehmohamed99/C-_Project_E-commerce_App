@@ -53,7 +53,6 @@
 //            if (category == null)
 //                throw new KeyNotFoundException($"Category with Id {id} not found.");
 
-
 //            if (_categoryRepository.HasProducts(id))
 //                throw new InvalidOperationException($"Cannot delete '{category.Name}' — it still has products.");
 
@@ -81,12 +80,12 @@
 //    }
 //}
 
+using System;
 using Application.DTOs.CategoryDTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Mapster;
-using System;
 
 namespace Application.Services
 {
@@ -101,21 +100,24 @@ namespace Application.Services
 
         public IQueryable<CategoryDto> GetAll()
         {
-            return _categoryRepository.GetAllEntitys()
-                           .Where(c => c.IsActive)
-                           .Select(c => new CategoryDto
-                           {
-                               Id = c.ID,
-                               Name = c.Name,
-                               IsActive = c.IsActive
-                           });
+            return _categoryRepository
+                .GetAllEntitys()
+                .Where(c => c.IsDeleted == false)
+                .Select(c => new CategoryDto
+                {
+                    Id = c.ID,
+                    Name = c.Name,
+                    IsActive = c.IsDeleted,
+                });
         }
 
         public CategoryDto Create(CreateCategoryDto dto)
         {
             var existing = _categoryRepository.GetByName(dto.Name);
             if (existing != null)
-                throw new InvalidOperationException($"A category named '{dto.Name}' already exists.");
+                throw new InvalidOperationException(
+                    $"A category named '{dto.Name}' already exists."
+                );
 
             var category = dto.Adapt<Category>();
             _categoryRepository.Add(category);
@@ -141,7 +143,9 @@ namespace Application.Services
 
             var existing = _categoryRepository.GetByName(dto.Name);
             if (existing != null && existing.ID != id)
-                throw new InvalidOperationException($"A category named '{dto.Name}' already exists.");
+                throw new InvalidOperationException(
+                    $"A category named '{dto.Name}' already exists."
+                );
 
             category.Rename(dto.Name);
             _categoryRepository.Update(category);

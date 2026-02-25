@@ -1,3 +1,4 @@
+﻿using System;
 using Application.DTOs.ProductDTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -8,12 +9,13 @@ namespace Application.Services
 {
     public class ProductAdminService : IProductAdminService
     {
-        private readonly IGenericRepository<Product, int> _productRepository;
-        private readonly IGenericRepository<Category, int> _categoryRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public ProductAdminService(
-            IGenericRepository<Product, int> productRepository,
-            IGenericRepository<Category, int> categoryRepository)
+            IProductRepository productRepository,
+            ICategoryRepository categoryRepository
+        )
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
@@ -23,94 +25,40 @@ namespace Application.Services
         {
             return _productRepository
                 .GetAllEntitys()
-                .Where(p => !p.IsDeleted)
+                .Where(p => p.IsActive)
                 .Select(p => new ProductDto
                 {
-                    Id = p.ID,
+                    ID = p.ID,
                     Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    UnitsInStock = p.UnitsInStock,
                     Image = p.Image,
+                    Price = p.Price,
+                    Description = p.Description,
+                    UnitsInStock = p.UnitsInStock,
+                    IsActive = p.IsActive,
                     CategoryId = p.CategoryId,
-                    CategoryName = p.category.Name,
-                    IsActive = p.IsActive
+                    CategoryName = p.category != null ? p.category.Name : "N/A",
                 });
-        }
-
-        public ProductDto GetById(int id)
-        {
-            var product = _productRepository
-                .GetAllEntitys()
-                .FirstOrDefault(p => p.ID == id && !p.IsDeleted);
-
-            if (product == null)
-                throw new KeyNotFoundException($"Product with Id {id} not found.");
-
-            return new ProductDto
-            {
-                Id = product.ID,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                UnitsInStock = product.UnitsInStock,
-                Image = product.Image,
-                CategoryId = product.CategoryId,
-                CategoryName = product.category?.Name,
-                IsActive = product.IsActive
-            };
         }
 
         public ProductDto Create(CreateProductDto dto)
         {
-            var category = _categoryRepository.GetAllEntitys()
-                .FirstOrDefault(c => c.ID == dto.CategoryId && !c.IsDeleted);
-
-            if (category == null)
-                throw new KeyNotFoundException($"Category with Id {dto.CategoryId} not found.");
-
-            var product = new Product
-            {
-                Name = dto.Name,
-                Description = dto.Description,
-                Price = dto.Price,
-                UnitsInStock = dto.UnitsInStock,
-                Image = dto.Image,
-                CategoryId = dto.CategoryId
-            };
-
+            var product = dto.Adapt<Product>();
             _productRepository.Add(product);
             _productRepository.SaveChanges();
-
-            return GetById(product.ID);
+            return product.Adapt<ProductDto>();
         }
 
         public ProductDto Update(int id, UpdateProductDto dto)
         {
-            var product = _productRepository
-                .GetAllEntitys()
-                .FirstOrDefault(p => p.ID == id && !p.IsDeleted);
-
+            var product = _productRepository.GetById(id);
             if (product == null)
                 throw new KeyNotFoundException($"Product with Id {id} not found.");
 
-            var category = _categoryRepository.GetAllEntitys()
-                .FirstOrDefault(c => c.ID == dto.CategoryId && !c.IsDeleted);
-
-            if (category == null)
-                throw new KeyNotFoundException($"Category with Id {dto.CategoryId} not found.");
-
-            product.Name = dto.Name ?? product.Name;
-            product.Description = dto.Description ?? product.Description;
-            product.Price = dto.Price;
-            product.UnitsInStock = dto.UnitsInStock;
-            product.Image = dto.Image ?? product.Image;
-            product.CategoryId = dto.CategoryId;
-
+            dto.Adapt(product);
+            product.UpdatePrice(dto.Price);
             _productRepository.Update(product);
             _productRepository.SaveChanges();
-
-            return GetById(id);
+            return product.Adapt<ProductDto>();
         }
 
         public void Delete(int id)
@@ -127,10 +75,51 @@ namespace Application.Services
             _productRepository.SaveChanges();
         }
 
-       
+        public void Activate(int id)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null)
+                throw new KeyNotFoundException($"Product with Id {id} not found.");
+
+            product.IsDeleted = false;
+            _productRepository.Update(product);
+            _productRepository.SaveChanges();
+        }
+
+        public void Restock(int id, RestockProductDto dto)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null)
+                throw new KeyNotFoundException($"Product with Id {id} not found.");
+
+            product.Restock(dto.Quantity);
+            _productRepository.Update(product);
+            _productRepository.SaveChanges();
+        }
+
+        public IEnumerable<ProductDto> GetByCategory(int categoryId)
+        {
+            return _productRepository
+                .GetAllEntitys()
+                .Where(p => p.IsActive && p.CategoryId == categoryId)
+                .Select(p => new ProductDto
+                {
+                    ID = p.ID,
+                    Name = p.Name,
+                    Image = p.Image,
+                    Price = p.Price,
+                    Description = p.Description,
+                    UnitsInStock = p.UnitsInStock,
+                    IsActive = p.IsActive,
+                    CategoryId = p.CategoryId,
+                    CategoryName = p.category != null ? p.category.Name : "N/A",
+                })
+                .ToList();
+        }
+
+        public ProductDto GetById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
-
-
-
-
+}

@@ -1,78 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Application.DTOs.ProductDTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
+using Mapster;
 
 namespace Application.Services
 {
     public class ProductCustomerService : IProductCustomerService
     {
-        private readonly IGenericRepository<Product, int> _productRepository;
+        private IProductRepository _productRepository;
+        private ICategoryRepository _categoryRepository;
 
-        public ProductCustomerService(IGenericRepository<Product, int> productRepository)
+        public ProductCustomerService(
+            IProductRepository productRepository,
+            ICategoryRepository categoryRepository
+        )
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        public IQueryable<ProductDto> GetAvailableProducts()
+        public IQueryable<ProductDto> GetAll()
         {
-            return _productRepository
-                .GetAllEntitys()
-                .Where(p => p.IsActive && !p.IsDeleted && p.UnitsInStock > 0)
-                .Select(p => new ProductDto
-                {
-                    Id = p.ID,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    UnitsInStock = p.UnitsInStock,
-                    Image = p.Image,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.category.Name,
-                    IsActive = p.IsActive
-                });
-        }
-
-        public IQueryable<ProductDto> SearchProducts(string searchTerm)
-        {
-            return _productRepository
-                .GetAllEntitys()
-                .Where(p => p.IsActive && !p.IsDeleted && p.Name.Contains(searchTerm))
-                .Select(p => new ProductDto
-                {
-                    Id = p.ID,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    UnitsInStock = p.UnitsInStock,
-                    Image = p.Image,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.category.Name,
-                    IsActive = p.IsActive
-                });
+            return _productRepository.GetAllEntitys().ToList().Adapt<List<ProductDto>>().AsQueryable();
         }
 
         public ProductDto GetById(int id)
         {
-            var product = _productRepository
-                .GetAllEntitys()
-                .FirstOrDefault(p => p.ID == id && p.IsActive && !p.IsDeleted);
+            var product = _productRepository.GetById(id);
+            return product.Adapt<ProductDto>();
+        }
 
-            if (product == null)
-                throw new KeyNotFoundException($"Product with Id {id} not found.");
+        public IEnumerable<ProductDto> SearchByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Search name cannot be empty.");
 
-            return new ProductDto
-            {
-                Id = product.ID,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                UnitsInStock = product.UnitsInStock,
-                Image = product.Image,
-                CategoryId = product.CategoryId,
-                CategoryName = product.category?.Name,
-                IsActive = product.IsActive
-            };
+            return _productRepository.SearchByName(name.Trim()).Adapt<IEnumerable<ProductDto>>();
         }
     }
 }

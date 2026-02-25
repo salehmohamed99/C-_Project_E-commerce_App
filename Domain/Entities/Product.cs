@@ -19,5 +19,39 @@ namespace Domain.Entities
 
         public List<OrderProduct> OrderProducts { get; private set; } = new List<OrderProduct>();
         public List<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+        public void Deactivate()
+        {
+            
+            IsActive = false;
+        }
+
+        public void Activate()
+        {
+             IsActive = true;
+        }
+
+        public void UpdatePrice(decimal newPrice)
+        {
+            if (newPrice <= 0)
+                throw new ArgumentException("Price must be greater than zero.");
+            Price = newPrice;
+        }
+
+        public void Restock(int quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentException("Restock quantity must be positive.");
+            UnitsInStock += quantity;
+        }
+
+        public void ReduceStock(int quantity)
+        {
+            
+            if (UnitsInStock < quantity)
+                throw new InvalidOperationException("Quantity dosn't enough");
+            UnitsInStock -= quantity;
+        }
+
     }
 }
