@@ -17,7 +17,9 @@ namespace Presentation.Forms
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
-            IGenericRepository<User, int> userRepository = new GenericRepository<User, int>(_context);
+            IGenericRepository<User, int> userRepository = new GenericRepository<User, int>(
+                _context
+            );
             _userService = new UserService(userRepository);
         }
 
@@ -27,7 +29,12 @@ namespace Presentation.Forms
 
             if (user == null)
             {
-                MessageBox.Show("Invalid username or password!", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Invalid username or password!",
+                    "Login Failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return;
             }
 
@@ -46,5 +53,7 @@ namespace Presentation.Forms
         }
 
         private void LoginForm_Load(object sender, EventArgs e) { }
+
+        private void lblBrand_Click(object sender, EventArgs e) { }
     }
 }

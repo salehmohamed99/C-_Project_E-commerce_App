@@ -287,15 +287,15 @@ namespace Presentation.Forms
             this.lblBrandIcon.Font = new System.Drawing.Font("Segoe UI Symbol", 26F, System.Drawing.FontStyle.Regular);
             this.lblBrandIcon.ForeColor = clrAccent;
             this.lblBrandIcon.Location = new System.Drawing.Point(22, 26);
-            this.lblBrandIcon.Size = new System.Drawing.Size(40, 40);
+            this.lblBrandIcon.Size = new System.Drawing.Size(40, 50);
             this.lblBrandIcon.BackColor = System.Drawing.Color.Transparent;
 
             this.lblBrandName.Name = "lblBrandName";
-            this.lblBrandName.Text = "NexAdmin";
+            this.lblBrandName.Text = "Admin";
             this.lblBrandName.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, System.Drawing.FontStyle.Bold);
             this.lblBrandName.ForeColor = clrWhite;
-            this.lblBrandName.Location = new System.Drawing.Point(65, 28);
-            this.lblBrandName.Size = new System.Drawing.Size(160, 26);
+            this.lblBrandName.Location = new System.Drawing.Point(65, 18);
+            this.lblBrandName.Size = new System.Drawing.Size(160, 33);
             this.lblBrandName.BackColor = System.Drawing.Color.Transparent;
 
             this.lblBrandTagline.Name = "lblBrandTagline";
