@@ -398,7 +398,7 @@ namespace Presentation.Forms
 
             // Logout button
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Text = "  ⏻   Sign Out";
+            this.btnLogout.Text = "  Sign Out";
             this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(239, 68, 68);
             this.btnLogout.BackColor = System.Drawing.Color.Transparent;

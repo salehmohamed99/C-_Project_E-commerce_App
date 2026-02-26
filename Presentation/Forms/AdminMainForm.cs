@@ -40,15 +40,15 @@ namespace Presentation.Forms
         private void ApplyModernStyling()
         {
             // Style navigation buttons
-            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnCategories, "📦 Categories", 200, 50);
-            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnProducts, "🛍️ Products", 200, 50);
-            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnOrders, "📋 Orders", 200, 50);
-            ModernDesignSystem.Buttons.ApplyDangerStyle(btnLogout, "🚪 Logout", 200, 50);
+            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnCategories, "Categories", 200, 50);
+            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnProducts, "Products", 200, 50);
+            ModernDesignSystem.Buttons.ApplySecondaryStyle(btnOrders, "Orders", 200, 50);
+            ModernDesignSystem.Buttons.ApplyDangerStyle(btnLogout, "Logout", 200, 50);
 
             // Style quick action buttons
             ModernDesignSystem.Buttons.ApplySuccessStyle(btnQuickCategories, "+ Categories", 180, 44);
             ModernDesignSystem.Buttons.ApplyPrimaryStyle(btnQuickProducts, "+ Products", 180, 44);
-            ModernDesignSystem.Buttons.ApplyWarningStyle(btnQuickOrders, "📊 View Orders", 180, 44);
+            ModernDesignSystem.Buttons.ApplyWarningStyle(btnQuickOrders, "View Orders", 180, 44);
 
             // Style stat cards
             ModernDesignSystem.Panels.ApplyCardStyle(pnlCardCategories, 12);

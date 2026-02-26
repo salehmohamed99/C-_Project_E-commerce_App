@@ -78,7 +78,7 @@ namespace Presentation.Forms
             this.pnlTopBar.Controls.Add(this.pnlTopAccent);
 
             this.lblTitleIcon.Name = "lblTitleIcon";
-            this.lblTitleIcon.Text = "?";
+            this.lblTitleIcon.Text = "";
             this.lblTitleIcon.Font = new System.Drawing.Font("Segoe UI Symbol", 20F);
             this.lblTitleIcon.ForeColor = clrAccent;
             this.lblTitleIcon.Location = new System.Drawing.Point(24, 16);

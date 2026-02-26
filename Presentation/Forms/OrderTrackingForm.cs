@@ -20,17 +20,20 @@ namespace Presentation.Forms
         public OrderTrackingForm(ApplicationDbContext context)
         {
             InitializeComponent();
-            
+
             _context = context;
             IOrderRepository orderRepository = new OrderRepository(_context);
-            IGenericRepository<CartItem, int> cartItemRepository = new GenericRepository<CartItem, int>(_context);
+            IGenericRepository<CartItem, int> cartItemRepository = new GenericRepository<
+                CartItem,
+                int
+            >(_context);
             _orderService = new OrderService(orderRepository, cartItemRepository);
 
             // Apply Modern Design
             ModernDesignSystem.Forms.ApplyModernFormStyle(this, "Order Tracking", 1300, 750);
             SetupGrid();
             LoadOrders();
-            
+
             // Handle resize
             this.Resize += OrderTrackingForm_Resize;
         }
@@ -38,115 +41,131 @@ namespace Presentation.Forms
         private void SetupGrid()
         {
             ModernDesignSystem.Grids.ApplyModernStyle(dgvOrders);
-            
+
             dgvOrders.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvOrders.Columns.Clear();
-            
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ID",
-                HeaderText = "Order #",
-                Width = 90,
-                MinimumWidth = 70,
-                DefaultCellStyle = new DataGridViewCellStyle
+
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    Font = ModernDesignSystem.Typography.H4,
-                    ForeColor = ModernDesignSystem.Colors.Primary
+                    Name = "ID",
+                    HeaderText = "Order #",
+                    Width = 90,
+                    MinimumWidth = 70,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Font = ModernDesignSystem.Typography.H4,
+                        ForeColor = ModernDesignSystem.Colors.Primary,
+                    },
                 }
-            });
+            );
 
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "User",
-                HeaderText = "Customer",
-                Width = 150,
-                MinimumWidth = 100,
-                DefaultCellStyle = new DataGridViewCellStyle
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold)
+                    Name = "User",
+                    HeaderText = "Customer",
+                    Width = 150,
+                    MinimumWidth = 100,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
+                    },
                 }
-            });
+            );
 
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Total",
-                HeaderText = "Total Amount",
-                Width = 120,
-                MinimumWidth = 90,
-                DefaultCellStyle = new DataGridViewCellStyle
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    Format = "C2",
-                    ForeColor = ModernDesignSystem.Colors.Success,
-                    Font = ModernDesignSystem.Typography.GridHeader
+                    Name = "Total",
+                    HeaderText = "Total Amount",
+                    Width = 120,
+                    MinimumWidth = 90,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Format = "C2",
+                        ForeColor = ModernDesignSystem.Colors.Success,
+                        Font = ModernDesignSystem.Typography.GridHeader,
+                    },
                 }
-            });
+            );
 
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Status",
-                HeaderText = "Status",
-                Width = 140,
-                MinimumWidth = 100,
-                DefaultCellStyle = new DataGridViewCellStyle
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    Font = ModernDesignSystem.Typography.GridHeader,
-                    Alignment = DataGridViewContentAlignment.MiddleCenter
+                    Name = "Status",
+                    HeaderText = "Status",
+                    Width = 140,
+                    MinimumWidth = 100,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Font = ModernDesignSystem.Typography.GridHeader,
+                        Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    },
                 }
-            });
+            );
 
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Date",
-                HeaderText = "Order Date",
-                Width = 150,
-                MinimumWidth = 120
-            });
-
-            dgvOrders.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Address",
-                HeaderText = "Shipping Address",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                MinimumWidth = 150
-            });
-
-            dgvOrders.Columns.Add(new DataGridViewButtonColumn
-            {
-                Name = "ViewBtn",
-                HeaderText = "",
-                Text = "??? View",
-                UseColumnTextForButtonValue = true,
-                Width = 100,
-                MinimumWidth = 80,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = new DataGridViewCellStyle
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    BackColor = ModernDesignSystem.Colors.Info,
-                    ForeColor = ModernDesignSystem.Colors.TextLight,
-                    Font = ModernDesignSystem.Typography.Button,
-                    SelectionBackColor = Color.FromArgb(37, 99, 235),
-                    SelectionForeColor = ModernDesignSystem.Colors.TextLight
+                    Name = "Date",
+                    HeaderText = "Order Date",
+                    Width = 150,
+                    MinimumWidth = 120,
                 }
-            });
+            );
 
-            dgvOrders.Columns.Add(new DataGridViewButtonColumn
-            {
-                Name = "UpdateBtn",
-                HeaderText = "",
-                Text = "?? Update",
-                UseColumnTextForButtonValue = true,
-                Width = 100,
-                MinimumWidth = 80,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = new DataGridViewCellStyle
+            dgvOrders.Columns.Add(
+                new DataGridViewTextBoxColumn
                 {
-                    BackColor = ModernDesignSystem.Colors.Warning,
-                    ForeColor = ModernDesignSystem.Colors.TextLight,
-                    Font = ModernDesignSystem.Typography.Button,
-                    SelectionBackColor = Color.FromArgb(234, 88, 12),
-                    SelectionForeColor = ModernDesignSystem.Colors.TextLight
+                    Name = "Address",
+                    HeaderText = "Shipping Address",
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                    MinimumWidth = 150,
                 }
-            });
+            );
+
+            dgvOrders.Columns.Add(
+                new DataGridViewButtonColumn
+                {
+                    Name = "ViewBtn",
+                    HeaderText = "",
+                    Text = "View",
+                    UseColumnTextForButtonValue = true,
+                    Width = 100,
+                    MinimumWidth = 80,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = ModernDesignSystem.Colors.Info,
+                        ForeColor = ModernDesignSystem.Colors.TextLight,
+                        Font = ModernDesignSystem.Typography.Button,
+                        SelectionBackColor = Color.FromArgb(37, 99, 235),
+                        SelectionForeColor = ModernDesignSystem.Colors.TextLight,
+                    },
+                }
+            );
+
+            dgvOrders.Columns.Add(
+                new DataGridViewButtonColumn
+                {
+                    Name = "UpdateBtn",
+                    HeaderText = "",
+                    Text = "Update",
+                    UseColumnTextForButtonValue = true,
+                    Width = 100,
+                    MinimumWidth = 80,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = ModernDesignSystem.Colors.Warning,
+                        ForeColor = ModernDesignSystem.Colors.TextLight,
+                        Font = ModernDesignSystem.Typography.Button,
+                        SelectionBackColor = Color.FromArgb(234, 88, 12),
+                        SelectionForeColor = ModernDesignSystem.Colors.TextLight,
+                    },
+                }
+            );
         }
 
         private void OrderTrackingForm_Resize(object sender, EventArgs e)
@@ -171,11 +190,11 @@ namespace Presentation.Forms
                 {
                     string statusDisplay = order.Status switch
                     {
-                        OrderStatus.Processing => "? Processing",
-                        OrderStatus.Shipped => "?? Shipped",
-                        OrderStatus.Delivered => "? Delivered",
-                        OrderStatus.Cancelled => "? Cancelled",
-                        _ => order.Status.ToString()
+                        OrderStatus.Processing => "Processing",
+                        OrderStatus.Shipped => "Shipped",
+                        OrderStatus.Delivered => "Delivered",
+                        OrderStatus.Cancelled => "Cancelled",
+                        _ => order.Status.ToString(),
                     };
 
                     int rowIdx = dgvOrders.Rows.Add(
@@ -194,9 +213,9 @@ namespace Presentation.Forms
                         OrderStatus.Shipped => ModernDesignSystem.Colors.Info,
                         OrderStatus.Delivered => ModernDesignSystem.Colors.Success,
                         OrderStatus.Cancelled => ModernDesignSystem.Colors.Danger,
-                        _ => ModernDesignSystem.Colors.TextPrimary
+                        _ => ModernDesignSystem.Colors.TextPrimary,
                     };
-                    
+
                     row.Cells["Status"].Style.ForeColor = statusColor;
                     row.Cells["Status"].Style.Font = ModernDesignSystem.Typography.GridHeader;
 
@@ -221,14 +240,16 @@ namespace Presentation.Forms
 
         private void dgvOrders_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0)
+                return;
 
             var orderIdText = dgvOrders.Rows[e.RowIndex].Cells["ID"].Value?.ToString() ?? "";
             if (!int.TryParse(orderIdText.Replace("#", ""), out int orderId))
                 return;
 
             var order = _loadedOrders.FirstOrDefault(o => o.ID == orderId);
-            if (order == null) return;
+            if (order == null)
+                return;
 
             if (e.ColumnIndex == dgvOrders.Columns["ViewBtn"].Index)
             {
@@ -250,10 +271,13 @@ namespace Presentation.Forms
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 MaximizeBox = false,
                 MinimizeBox = false,
-                BackColor = ModernDesignSystem.Colors.ContentBackground
+                BackColor = ModernDesignSystem.Colors.ContentBackground,
             };
 
-            var pnlHeader = ModernDesignSystem.Forms.CreateHeader($"Update Order #{order.ID}", "Select new status for this order");
+            var pnlHeader = ModernDesignSystem.Forms.CreateHeader(
+                $"Update Order #{order.ID}",
+                "Select new status for this order"
+            );
             pnlHeader.Height = 80;
             form.Controls.Add(pnlHeader);
 
@@ -263,7 +287,7 @@ namespace Presentation.Forms
                 Location = new Point(ModernDesignSystem.Spacing.Large, 95),
                 AutoSize = true,
                 Font = ModernDesignSystem.Typography.Label,
-                ForeColor = ModernDesignSystem.Colors.TextPrimary
+                ForeColor = ModernDesignSystem.Colors.TextPrimary,
             };
 
             var cmb = new ComboBox
@@ -274,18 +298,18 @@ namespace Presentation.Forms
                 BackColor = ModernDesignSystem.Colors.CardBackground,
                 ForeColor = ModernDesignSystem.Colors.TextPrimary,
                 FlatStyle = FlatStyle.Flat,
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
             };
-            
+
             cmb.Items.AddRange(Enum.GetNames<OrderStatus>());
             cmb.SelectedItem = order.Status.ToString();
 
             var btnSave = new Button
             {
-                Location = new Point(ModernDesignSystem.Spacing.Large, 160)
+                Location = new Point(ModernDesignSystem.Spacing.Large, 160),
             };
-            ModernDesignSystem.Buttons.ApplySuccessStyle(btnSave, "? Save Changes", 150, 40);
-            
+            ModernDesignSystem.Buttons.ApplySuccessStyle(btnSave, "Save Changes", 150, 40);
+
             btnSave.Click += async (s, e) =>
             {
                 try
@@ -293,11 +317,12 @@ namespace Presentation.Forms
                     var newStatus = Enum.Parse<OrderStatus>(cmb.SelectedItem.ToString()!);
                     var dto = new UpdateOrderDTO { ID = order.ID, Status = newStatus };
                     await _orderService.UpdateOrderStatusAsync(dto);
-                    
+
                     ModernDesignSystem.Messages.ShowSuccess(
                         $"Order #{order.ID} status updated to {newStatus}!",
-                        "Status Updated");
-                    
+                        "Status Updated"
+                    );
+
                     form.DialogResult = DialogResult.OK;
                     form.Close();
                     LoadOrders();
@@ -308,10 +333,7 @@ namespace Presentation.Forms
                 }
             };
 
-            var btnCancel = new Button
-            {
-                Location = new Point(200, 160)
-            };
+            var btnCancel = new Button { Location = new Point(200, 160) };
             ModernDesignSystem.Buttons.ApplySecondaryStyle(btnCancel, "Cancel", 150, 40);
             btnCancel.Click += (s, e) => form.Close();
 
@@ -323,6 +345,7 @@ namespace Presentation.Forms
         }
 
         private void OrderTrackingForm_Load(object sender, EventArgs e) { }
+
         private void btnClose_Click(object sender, EventArgs e) => this.Close();
     }
 }

@@ -231,7 +231,7 @@ namespace Presentation.Forms
             this.pnlLeft.BackColor = System.Drawing.Color.FromArgb(30, 42, 56);
 
             // Brand icon circle
-            this.lblBrandIcon.Text = "🛍";
+            this.lblBrandIcon.Text = "S";
             this.lblBrandIcon.Font = new System.Drawing.Font("Segoe UI", 28F);
             this.lblBrandIcon.ForeColor = System.Drawing.Color.White;
             this.lblBrandIcon.BackColor = System.Drawing.Color.FromArgb(50, 255, 255, 255);

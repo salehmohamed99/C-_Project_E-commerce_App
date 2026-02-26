@@ -27,10 +27,10 @@ namespace Presentation.Forms
         private void ApplyModernStyling()
         {
             // Style navigation buttons
-            ModernDesignSystem.Buttons.ApplyPrimaryStyle(btnBrowse, "??? Browse Products", 200, 50);
-            ModernDesignSystem.Buttons.ApplySuccessStyle(btnCart, "?? My Cart", 200, 50);
-            ModernDesignSystem.Buttons.ApplyWarningStyle(btnOrders, "?? My Orders", 200, 50);
-            ModernDesignSystem.Buttons.ApplyDangerStyle(btnLogout, "?? Logout", 200, 50);
+            ModernDesignSystem.Buttons.ApplyPrimaryStyle(btnBrowse, "Browse Products", 200, 50);
+            ModernDesignSystem.Buttons.ApplySuccessStyle(btnCart, "My Cart", 200, 50);
+            ModernDesignSystem.Buttons.ApplyWarningStyle(btnOrders, "My Orders", 200, 50);
+            ModernDesignSystem.Buttons.ApplyDangerStyle(btnLogout, "Logout", 200, 50);
 
             // Add hover effects
             WireHoverEffects();

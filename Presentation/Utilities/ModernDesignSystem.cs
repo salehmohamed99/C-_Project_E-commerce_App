@@ -376,25 +376,16 @@ namespace Presentation.Utilities
                 };
                 pnl.Controls.Add(pnlAccent);
 
-                var lblIcon = new Label
-                {
-                    Text = "?",
-                    Font = new Font("Segoe UI", 20F),
-                    ForeColor = Colors.Primary,
-                    Location = new Point(Spacing.Large, 20),
-                    AutoSize = true
-                };
-
                 var lblTitle = new Label
                 {
                     Text = title,
                     Font = Typography.H3,
                     ForeColor = Colors.TextLight,
-                    Location = new Point(Spacing.Large + 40, 25),
+                    Location = new Point(Spacing.Large, 25),
                     AutoSize = true
                 };
 
-                pnl.Controls.AddRange(new Control[] { lblIcon, lblTitle });
+                pnl.Controls.AddRange(new Control[] { lblTitle });
 
                 if (!string.IsNullOrEmpty(subtitle))
                 {
@@ -403,7 +394,7 @@ namespace Presentation.Utilities
                         Text = subtitle,
                         Font = Typography.BodySmall,
                         ForeColor = Colors.TextMuted,
-                        Location = new Point(Spacing.Large + 40, 55),
+                        Location = new Point(Spacing.Large, 55),
                         AutoSize = true
                     };
                     pnl.Controls.Add(lblSubtitle);

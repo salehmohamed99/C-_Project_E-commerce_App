@@ -68,7 +68,7 @@ namespace Presentation.Forms
             this.lblTitleIcon.ForeColor = clrAccent;
             this.lblTitleIcon.Location = new System.Drawing.Point(24, 16);
             this.lblTitleIcon.Name = "lblTitleIcon";
-            this.lblTitleIcon.Text = "??";
+            this.lblTitleIcon.Text = "";
 
             this.lblTitle.AutoSize = true;
             this.lblTitle.BackColor = System.Drawing.Color.Transparent;
@@ -115,16 +115,16 @@ namespace Presentation.Forms
                 return btn;
             }
 
-            this.btnBrowse = MakeBtn("?? Browse Products", System.Drawing.Color.FromArgb(52, 152, 219), 60, 60);
+            this.btnBrowse = MakeBtn("Browse Products", System.Drawing.Color.FromArgb(52, 152, 219), 60, 60);
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
 
-            this.btnCart = MakeBtn("?? View Cart", System.Drawing.Color.FromArgb(243, 156, 18), 340, 60);
+            this.btnCart = MakeBtn("View Cart", System.Drawing.Color.FromArgb(243, 156, 18), 340, 60);
             this.btnCart.Click += new System.EventHandler(this.btnCart_Click);
 
-            this.btnOrders = MakeBtn("?? My Orders", System.Drawing.Color.FromArgb(39, 174, 96), 60, 220);
+            this.btnOrders = MakeBtn("My Orders", System.Drawing.Color.FromArgb(39, 174, 96), 60, 220);
             this.btnOrders.Click += new System.EventHandler(this.btnOrders_Click);
 
-            this.btnLogout = MakeBtn("? Logout", System.Drawing.Color.FromArgb(231, 76, 60), 340, 220);
+            this.btnLogout = MakeBtn("Logout", System.Drawing.Color.FromArgb(231, 76, 60), 340, 220);
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
 
             this.pnlContent.Controls.Add(this.btnBrowse);
